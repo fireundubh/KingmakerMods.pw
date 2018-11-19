@@ -1,0 +1,25 @@
+{
+  "$id": "1",
+  "strings": [
+    {
+      "Key": "a0763979-fde3-44bb-a68f-3ee826d9c8fe",
+      "Value": "{0} - KM.pw v1.0.14"
+    },
+    {
+      "Key": "9aa0b914-9429-4c37-9344-862f5036d237",
+      "Value": "{0} GP"
+    },
+    {
+      "Key": "9191fbc8-23ac-4bd4-8167-28de8d418122",
+      "Value": "<size=-2>{0}</size>"
+    },
+    {
+      "Key": "da676fed-170f-4099-8b09-ba516d632dd7",
+      "Value": "<size=-2>{0}, {1} GP</size>"
+    },
+    {
+      "Key": "76e0a02a-e6f4-4422-b14d-d958028a7cbd",
+      "Value": "{0} <{1}>"
+    }
+  ]
+}
