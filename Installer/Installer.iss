@@ -22,7 +22,7 @@ AppUpdatesURL={#MyAppURL}
 DefaultDirName={localappdata}\{#MyAppName}
 DefaultGroupName={#MyAppName}
 AllowNoIcons=yes
-LicenseFile=E:\projects\PatchworkPathfinder\Installer\license.rtf
+LicenseFile=E:\repos\KingmakerMods.pw\Installer\license.rtf
 OutputBaseFilename=KingmakerMods.pw-{#MyAppVersion}
 Compression=lzma
 SolidCompression=yes
@@ -44,34 +44,34 @@ Name: "{code:GamePathOrCustom}\Kingmaker_Data\Mods\Localization\ruRU"
 Name: "{code:GamePathOrCustom}\Kingmaker_Data\Mods\Localization\zhCN"
 
 [Files]
-Source: "E:\projects\PatchworkPathfinder\PatchworkLauncher\bin\Release\Mods\KingmakerMods.pw.dll"; DestDir: "{app}\Mods"; Flags: ignoreversion
-Source: "E:\projects\PatchworkPathfinder\PatchworkLauncher\bin\Release\PEVerify"; DestDir: "{app}"; Flags: ignoreversion
-Source: "E:\projects\PatchworkPathfinder\PatchworkLauncher\bin\Release\PatchworkLauncher.exe.config"; DestDir: "{app}"; Flags: ignoreversion
-Source: "E:\projects\PatchworkPathfinder\PatchworkLauncher\bin\Release\AppInfo.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "E:\projects\PatchworkPathfinder\PatchworkLauncher\bin\Release\Mono.Cecil.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "E:\projects\PatchworkPathfinder\PatchworkLauncher\bin\Release\Mono.Cecil.Mdb.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "E:\projects\PatchworkPathfinder\PatchworkLauncher\bin\Release\Mono.Cecil.Pdb.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "E:\projects\PatchworkPathfinder\PatchworkLauncher\bin\Release\Mono.Cecil.Rocks.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "E:\projects\PatchworkPathfinder\PatchworkLauncher\bin\Release\Patchwork.Attributes.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "E:\projects\PatchworkPathfinder\PatchworkLauncher\bin\Release\Patchwork.Engine.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "E:\projects\PatchworkPathfinder\PatchworkLauncher\bin\Release\pevrfyrc.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "E:\projects\PatchworkPathfinder\PatchworkLauncher\bin\Release\Serilog.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "E:\projects\PatchworkPathfinder\PatchworkLauncher\bin\Release\Serilog.Sinks.File.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "E:\projects\PatchworkPathfinder\PatchworkLauncher\bin\Release\OpenAssemblyCreator.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "E:\projects\PatchworkPathfinder\PatchworkLauncher\bin\Release\PatchworkLauncher.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "E:\projects\PatchworkPathfinder\PatchworkLauncher\bin\Release\Serilog.pdb"; DestDir: "{app}"; Flags: ignoreversion
-Source: "E:\projects\PatchworkPathfinder\PatchworkLauncher\bin\Release\preferences.pw.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: "E:\projects\PatchworkPathfinder\PatchworkLauncher\bin\Release\Serilog.Sinks.File.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: "E:\projects\PatchworkPathfinder\PatchworkLauncher\bin\Release\Serilog.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: "E:\projects\PatchworkPathfinder\KingmakerMods.ini"; DestDir: "{code:GamePathOrCustom}"; Flags: ignoreversion confirmoverwrite uninsneveruninstall
-Source: "E:\projects\PatchworkPathfinder\packages\ini-parser.2.5.2\lib\net20\INIFileParser.dll"; DestDir: "{code:GamePathOrCustom}\Kingmaker_Data\Managed"; Flags: ignoreversion
-Source: "E:\projects\PatchworkPathfinder\PatchworkLauncher\bin\Release\Patchwork.Attributes.dll"; DestDir: "{code:GamePathOrCustom}\Kingmaker_Data\Managed"; Flags: ignoreversion
-Source: "E:\projects\PatchworkPathfinder\Kingmaker_Data\Mods\Localization\enGB\KingmakerMods.pw.json"; DestDir: "{code:GamePathOrCustom}\Kingmaker_Data\Mods\Localization\deDE"; Flags: ignoreversion
-Source: "E:\projects\PatchworkPathfinder\Kingmaker_Data\Mods\Localization\enGB\KingmakerMods.pw.json"; DestDir: "{code:GamePathOrCustom}\Kingmaker_Data\Mods\Localization\enGB"; Flags: ignoreversion
-Source: "E:\projects\PatchworkPathfinder\Kingmaker_Data\Mods\Localization\enGB\KingmakerMods.pw.json"; DestDir: "{code:GamePathOrCustom}\Kingmaker_Data\Mods\Localization\frFR"; Flags: ignoreversion
-Source: "E:\projects\PatchworkPathfinder\Kingmaker_Data\Mods\Localization\enGB\KingmakerMods.pw.json"; DestDir: "{code:GamePathOrCustom}\Kingmaker_Data\Mods\Localization\ruRU"; Flags: ignoreversion
-Source: "E:\projects\PatchworkPathfinder\Kingmaker_Data\Mods\Localization\enGB\KingmakerMods.pw.json"; DestDir: "{code:GamePathOrCustom}\Kingmaker_Data\Mods\Localization\zhCN"; Flags: ignoreversion
-Source: "E:\projects\PatchworkPathfinder\Installer\settings.pw.xml"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "E:\repos\KingmakerMods.pw Launcher\PatchworkLauncher\bin\Release\Mods\KingmakerMods.pw.dll"; DestDir: "{app}\Mods"; Flags: ignoreversion
+Source: "E:\repos\KingmakerMods.pw Launcher\PatchworkLauncher\bin\Release\PEVerify"; DestDir: "{app}"; Flags: ignoreversion
+Source: "E:\repos\KingmakerMods.pw Launcher\PatchworkLauncher\bin\Release\PatchworkLauncher.exe.config"; DestDir: "{app}"; Flags: ignoreversion
+Source: "E:\repos\KingmakerMods.pw Launcher\PatchworkLauncher\bin\Release\AppInfo.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "E:\repos\KingmakerMods.pw Launcher\PatchworkLauncher\bin\Release\Mono.Cecil.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "E:\repos\KingmakerMods.pw Launcher\PatchworkLauncher\bin\Release\Mono.Cecil.Mdb.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "E:\repos\KingmakerMods.pw Launcher\PatchworkLauncher\bin\Release\Mono.Cecil.Pdb.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "E:\repos\KingmakerMods.pw Launcher\PatchworkLauncher\bin\Release\Mono.Cecil.Rocks.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "E:\repos\KingmakerMods.pw Launcher\PatchworkLauncher\bin\Release\Patchwork.Attributes.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "E:\repos\KingmakerMods.pw Launcher\PatchworkLauncher\bin\Release\Patchwork.Engine.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "E:\repos\KingmakerMods.pw Launcher\PatchworkLauncher\bin\Release\pevrfyrc.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "E:\repos\KingmakerMods.pw Launcher\PatchworkLauncher\bin\Release\Serilog.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "E:\repos\KingmakerMods.pw Launcher\PatchworkLauncher\bin\Release\Serilog.Sinks.File.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "E:\repos\KingmakerMods.pw Launcher\PatchworkLauncher\bin\Release\OpenAssemblyCreator.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "E:\repos\KingmakerMods.pw Launcher\PatchworkLauncher\bin\Release\PatchworkLauncher.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "E:\repos\KingmakerMods.pw Launcher\PatchworkLauncher\bin\Release\Serilog.pdb"; DestDir: "{app}"; Flags: ignoreversion
+Source: "E:\repos\KingmakerMods.pw Launcher\PatchworkLauncher\bin\Release\preferences.pw.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "E:\repos\KingmakerMods.pw Launcher\PatchworkLauncher\bin\Release\Serilog.Sinks.File.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "E:\repos\KingmakerMods.pw Launcher\PatchworkLauncher\bin\Release\Serilog.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "E:\repos\KingmakerMods.pw\KingmakerMods.ini"; DestDir: "{code:GamePathOrCustom}"; Flags: ignoreversion confirmoverwrite uninsneveruninstall
+Source: "E:\repos\KingmakerMods.pw Launcher\packages\ini-parser.2.5.2\lib\net20\INIFileParser.dll"; DestDir: "{code:GamePathOrCustom}\Kingmaker_Data\Managed"; Flags: ignoreversion
+Source: "E:\repos\KingmakerMods.pw Launcher\PatchworkLauncher\bin\Release\Patchwork.Attributes.dll"; DestDir: "{code:GamePathOrCustom}\Kingmaker_Data\Managed"; Flags: ignoreversion
+Source: "E:\repos\KingmakerMods.pw\Kingmaker_Data\Mods\Localization\enGB\KingmakerMods.pw.json"; DestDir: "{code:GamePathOrCustom}\Kingmaker_Data\Mods\Localization\deDE"; Flags: ignoreversion
+Source: "E:\repos\KingmakerMods.pw\Kingmaker_Data\Mods\Localization\enGB\KingmakerMods.pw.json"; DestDir: "{code:GamePathOrCustom}\Kingmaker_Data\Mods\Localization\enGB"; Flags: ignoreversion
+Source: "E:\repos\KingmakerMods.pw\Kingmaker_Data\Mods\Localization\enGB\KingmakerMods.pw.json"; DestDir: "{code:GamePathOrCustom}\Kingmaker_Data\Mods\Localization\frFR"; Flags: ignoreversion
+Source: "E:\repos\KingmakerMods.pw\Kingmaker_Data\Mods\Localization\enGB\KingmakerMods.pw.json"; DestDir: "{code:GamePathOrCustom}\Kingmaker_Data\Mods\Localization\ruRU"; Flags: ignoreversion
+Source: "E:\repos\KingmakerMods.pw\Kingmaker_Data\Mods\Localization\enGB\KingmakerMods.pw.json"; DestDir: "{code:GamePathOrCustom}\Kingmaker_Data\Mods\Localization\zhCN"; Flags: ignoreversion
+Source: "E:\repos\KingmakerMods.pw\Installer\settings.pw.xml"; DestDir: "{app}"; Flags: ignoreversion;
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
