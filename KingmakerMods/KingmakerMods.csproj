@@ -177,6 +177,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>py3 "E:\projects\netbootstrap" -i $(TargetPath) -o $(SolutionDir)PatchworkLauncher\$(OutDir)Mods\$(TargetFileName)</PostBuildEvent>
+    <PostBuildEvent>py3 "E:\projects\netbootstrap" -i "$(TargetPath)" -o "$(SolutionDir)PatchworkLauncher\$(OutDir)Mods\$(TargetFileName)"</PostBuildEvent>
   </PropertyGroup>
 </Project>
