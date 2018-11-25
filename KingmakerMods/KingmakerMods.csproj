@@ -73,6 +73,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\SteamLibrary\Pathfinder Kingmaker\Kingmaker_Data\Managed\UnityEngine.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.AnimationModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\SteamLibrary\Pathfinder Kingmaker\Kingmaker_Data\Managed\UnityEngine.AnimationModule.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\SteamLibrary\Pathfinder Kingmaker\Kingmaker_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
@@ -90,6 +94,18 @@
     <Compile Include="Helpers\DeadEndException.cs" />
     <Compile Include="Helpers\KingmakerModsException.cs" />
     <Compile Include="Mods\Cheats\Configurables\KingdomEvents\KingdomEventNew.cs" />
+    <Compile Include="Mods\Cheats\Toggles\InstantCooldowns\UnitCombatCooldownsControllerNew.cs" />
+    <Compile Include="Mods\Cheats\Toggles\InstantCooldowns\UnitCooldownsHelper.cs" />
+    <Compile Include="Mods\Cheats\Toggles\InstantCooldowns\UnitActivatableAbilitiesControllerNew.cs" />
+    <Compile Include="Mods\Cheats\Toggles\InstantCooldowns\UnitCommandNew.cs" />
+    <Compile Include="Mods\Cheats\Toggles\NeverFailSkillChecks\RulePartySkillCheckNew.cs" />
+    <Compile Include="Mods\Cheats\Toggles\NeverFailSkillChecks\RuleSkillCheckNew.cs" />
+    <Compile Include="Mods\Cheats\Toggles\NeverFailSkillChecks\StaticEntityDataNew.cs" />
+    <Compile Include="Mods\UI\Configurables\HighlightObjectsToggle\InteractionHighlightControllerNew.cs" />
+    <Compile Include="Mods\UI\Configurables\HighlightObjectsToggle\KeyboardAccessNew.cs" />
+    <Compile Include="Mods\Fixes\Familiar.cs" />
+    <Compile Include="Mods\Fixes\GameHelperNew.cs" />
+    <Compile Include="Mods\Fixes\OvertipControllerBaseNew.cs" />
     <Compile Include="Mods\UI\Toggles\ItemSellPriceLabel\UIUtilityTextsNew.cs" />
     <Compile Include="Mods\Cheats\Configurables\VendorLogic\VendorLogicNew.cs" />
     <Compile Include="Mods\Cheats\Configurables\XPGain\GameHelperNew.cs" />
@@ -172,11 +188,9 @@
     <None Include="KingmakerMods.ruleset" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Mods\UI\Configurables\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>py3 "E:\projects\netbootstrap" -i "$(TargetPath)" -o "$(SolutionDir)PatchworkLauncher\$(OutDir)Mods\$(TargetFileName)"</PostBuildEvent>
+    <PostBuildEvent>py3 "E:\projects\netbootstrap" -i "$(TargetPath)" -o "$(SolutionDir)PatchworkLauncher\$(OutDir)Mods\$(TargetFileName)" | py3 "E:\projects\netbootstrap" -i "$(TargetPath)" -o "C:\Users\fireundubh\AppData\Local\KingmakerMods.pw\Mods\$(TargetFileName)"</PostBuildEvent>
   </PropertyGroup>
 </Project>
