@@ -12,7 +12,7 @@ namespace AppInfoDLLProj
 			AppInfo ai = new AppInfo
 			{
 				AppName = "Pathfinder: Kingmaker",
-				AppVersion = "1.0.15",
+				AppVersion = "1.0.16",
 				BaseDirectory = folderInfo
 			};
 
