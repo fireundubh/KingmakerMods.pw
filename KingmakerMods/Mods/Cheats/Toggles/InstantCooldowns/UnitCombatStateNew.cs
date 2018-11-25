@@ -1,7 +1,6 @@
 ﻿using System;
 using Kingmaker.Controllers.Combat;
 using Kingmaker.EntitySystem.Entities;
-using Kingmaker.UnitLogic.Commands.Base;
 using KingmakerMods.Helpers;
 using Patchwork;
 
@@ -10,6 +9,7 @@ namespace KingmakerMods.Mods.Cheats.Toggles.InstantCooldowns
 	[ModifiesType]
 	public class UnitCombatStateNew : UnitCombatState
 	{
+		#region CONFIGURATION
 		[NewMember]
 		private static bool _cfgInit;
 
@@ -27,63 +27,16 @@ namespace KingmakerMods.Mods.Cheats.Toggles.InstantCooldowns
 
 			return _useMod;
 		}
+		#endregion
 
-		[NewMember]
-		[DuplicatesBody("HasCooldownForCommand")]
-		public bool source_HasCooldownForCommand(UnitCommand command)
-		{
-			throw new DeadEndException("source_HasCooldownForCommand(UnitCommand command)");
-		}
-
-		[ModifiesMember("HasCooldownForCommand")]
-		public bool mod_HasCooldownForCommand(UnitCommand command)
-		{
-			_useMod = IsModReady();
-
-			if (!_useMod)
-			{
-				return this.source_HasCooldownForCommand(command);
-			}
-
-			if (!this.Unit.IsDirectlyControllable)
-			{
-				return this.source_HasCooldownForCommand(command);
-			}
-
-			return false;
-		}
-
-		[NewMember]
-		[DuplicatesBody("HasCooldownForCommand")]
-		public bool source_HasCooldownForCommand(UnitCommand.CommandType commandType)
-		{
-			throw new DeadEndException("source_HasCooldownForCommand(UnitCommand.CommandType commandType)");
-		}
-
-		[ModifiesMember("HasCooldownForCommand")]
-		public bool mod_HasCooldownForCommand(UnitCommand.CommandType commandType)
-		{
-			_useMod = IsModReady();
-
-			if (!_useMod)
-			{
-				return this.source_HasCooldownForCommand(commandType);
-			}
-
-			if (!this.Unit.IsDirectlyControllable)
-			{
-				return this.source_HasCooldownForCommand(commandType);
-			}
-
-			return false;
-		}
-
+		#region DUPLICATED METHODS
 		[NewMember]
 		[DuplicatesBody("OnNewRound")]
 		public void source_OnNewRound()
 		{
 			throw new DeadEndException("source_OnNewRound");
 		}
+		#endregion
 
 		[ModifiesMember("OnNewRound")]
 		public void mod_OnNewRound()
@@ -96,19 +49,14 @@ namespace KingmakerMods.Mods.Cheats.Toggles.InstantCooldowns
 				return;
 			}
 
-			if (this.Unit.IsDirectlyControllable)
+			if (_useMod && this.Unit.IsDirectlyControllable)
 			{
-				this.Cooldown.Initiative = 0f;
-				this.Cooldown.StandardAction = 0f;
-				this.Cooldown.MoveAction = 0f;
-				this.Cooldown.SwiftAction = 0f;
-				this.Cooldown.AttackOfOpportunity = 0f;
+				// this.Cooldown.Clear()
+				UnitCooldownsHelper.Reset(this.Cooldown);
 			}
 
 			this.source_OnNewRound();
 		}
-
-
 
 		[Obsolete]
 		public UnitCombatStateNew(UnitEntityData unit) : base(unit)

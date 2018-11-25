@@ -1,0 +1,103 @@
+﻿using Kingmaker.Blueprints.Facts;
+using Kingmaker.Controllers.Units;
+using Kingmaker.EntitySystem.Entities;
+using Kingmaker.GameModes;
+using Kingmaker.UnitLogic.ActivatableAbilities;
+using Kingmaker.UnitLogic.Parts;
+using KingmakerMods.Helpers;
+using Patchwork;
+
+namespace KingmakerMods.Mods.Cheats.Toggles.InstantCooldowns
+{
+	[ModifiesType]
+	public class UnitActivatableAbilitiesControllerNew : UnitActivatableAbilitiesController
+	{
+		#region CONFIGURATION
+		[NewMember]
+		private static bool _cfgInit;
+
+		[NewMember]
+		private static bool _useMod;
+
+		[NewMember]
+		private static bool IsModReady()
+		{
+			if (!_cfgInit)
+			{
+				_cfgInit = true;
+				_useMod = UserConfig.Parser.GetValueAsBool("Cheats", "bInstantCooldowns");
+			}
+
+			return _useMod;
+		}
+		#endregion
+
+		#region DUPLICATED METHODS
+		[NewMember]
+		[DuplicatesBody("TickOnUnit")]
+		protected void source_TickOnUnit(UnitEntityData unit)
+		{
+			throw new DeadEndException("source_TickOnUnit");
+		}
+		#endregion
+
+		[ModifiesMember("TickOnUnit")]
+		protected void mod_TickOnUnit(UnitEntityData unit)
+		{
+			_useMod = IsModReady();
+
+			if (unit.ActivatableAbilities.RawFacts.Count <= 0)
+			{
+				return;
+			}
+
+			foreach (Fact fact in unit.ActivatableAbilities.RawFacts)
+			{
+				var ability = (ActivatableAbility) fact;
+
+				if (ability.IsWaitingForTarget)
+				{
+					continue;
+				}
+
+				bool flag = ability.Blueprint.DeactivateIfOwnerDisabled && !ability.Owner.State.CanAct || ability.Blueprint.DeactivateIfOwnerUnconscious && !ability.Owner.State.IsConscious || Kingmaker.Game.Instance.CurrentMode == GameModeType.Rest;
+
+				if (ability.IsRunning)
+				{
+					if (flag)
+					{
+						ability.Stop();
+					}
+					else
+					{
+						ability.TimeToNextRound -= Kingmaker.Game.Instance.TimeController.GameDeltaTime;
+
+						if (ability.TimeToNextRound <= 0f)
+						{
+							ability.OnNewRound();
+
+							if (_useMod && ability.Owner.Unit.IsDirectlyControllable)
+							{
+								UnitCooldownsHelper.Reset(ability.Owner.Unit.CombatState.Cooldown);
+							}
+
+							ability.TimeToNextRound = 6f;
+						}
+					}
+				}
+				else if (ability.IsOn && (ability.Blueprint.ActivateImmediately || ability.ReadyToStart))
+				{
+					if (ability.Blueprint.ActivateOnCombatStarts && !unit.IsInCombat || flag)
+					{
+						continue;
+					}
+
+					ability.TryStart();
+				}
+			}
+
+			var unitPartActivatableAbility = unit.Get<UnitPartActivatableAbility>();
+			unitPartActivatableAbility?.Update();
+		}
+	}
+}
