@@ -16,44 +16,25 @@ namespace KingmakerMods.Mods.Cheats.Toggles.NoFriendlyFireAOE
 	[ModifiesType]
 	public class AbilityTargetsAroundNew : AbilityTargetsAround
 	{
-		[NewMember]
-		private static bool _cfgInit;
-
-		[NewMember]
-		private static bool _useMod;
-
 		[ModifiesAccessibility("m_TargetType")]
-		public TargetType m_TargetTypeNew;
+		public TargetType mod_m_TargetType;
 
 		[ModifiesAccessibility("m_Condition")]
-		public ConditionsChecker m_ConditionNew;
+		public ConditionsChecker mod_m_Condition;
 
-		[NewMember]
-		private bool HasConditions(MechanicsContext context, UnitEntityData unit)
-		{
-			using (context.GetDataScope(unit))
-			{
-				return this.m_ConditionNew.Check();
-			}
-		}
-
+		#region DUPLICATES
 		[NewMember]
 		[DuplicatesBody("Select")]
 		public IEnumerable<TargetWrapper> source_Select(AbilityExecutionContext context, TargetWrapper anchor)
 		{
 			throw new DeadEndException("source_Select");
 		}
+		#endregion
 
 		[ModifiesMember("Select", ModificationScope.Body)]
 		public IEnumerable<TargetWrapper> mod_Select(AbilityExecutionContext context, TargetWrapper anchor)
 		{
-			if (!_cfgInit)
-			{
-				_cfgInit = true;
-				_useMod = UserConfig.Parser.GetValueAsBool("Cheats", "bNoFriendlyFireAOE");
-			}
-
-			if (!_useMod)
+			if (!KingmakerPatchSettings.Cheats.NoFriendlyFireAOE)
 			{
 				return this.source_Select(context, anchor);
 			}
@@ -68,16 +49,17 @@ namespace KingmakerMods.Mods.Cheats.Toggles.NoFriendlyFireAOE
 				return Enumerable.Empty<TargetWrapper>();
 			}
 
-			if (this.m_TargetTypeNew == TargetType.Enemy)
+			switch (this.mod_m_TargetType)
 			{
-				targets = targets.Where(caster.IsEnemy);
-			}
-			else if (this.m_TargetTypeNew == TargetType.Ally)
-			{
-				targets = targets.Where(caster.IsAlly);
+				case TargetType.Enemy:
+					targets = targets.Where(caster.IsEnemy);
+					break;
+				case TargetType.Ally:
+					targets = targets.Where(caster.IsAlly);
+					break;
 			}
 
-			if (this.m_ConditionNew.HasConditions)
+			if (this.mod_m_Condition.HasConditions)
 			{
 				targets = targets.Where(u => this.HasConditions(context, u)).ToList();
 			}
@@ -88,6 +70,15 @@ namespace KingmakerMods.Mods.Cheats.Toggles.NoFriendlyFireAOE
 			}
 
 			return targets.Select(target => new TargetWrapper(target));
+		}
+
+		[NewMember]
+		private bool HasConditions(MechanicsContext context, UnitEntityData unit)
+		{
+			using (context.GetDataScope(unit))
+			{
+				return this.mod_m_Condition.Check();
+			}
 		}
 	}
 }

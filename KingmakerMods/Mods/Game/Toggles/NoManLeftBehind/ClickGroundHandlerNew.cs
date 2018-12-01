@@ -17,16 +17,11 @@ namespace KingmakerMods.Mods.Game.Toggles.NoManLeftBehind
 	[ModifiesType]
 	public class ClickGroundHandlerNew : ClickGroundHandler
 	{
-		[NewMember]
-		private static bool _cfgInit;
-
-		[NewMember]
-		private static bool _useMod;
-
 		[ModifiesMember("m_UnitWaitAgentList")]
 		[ToggleFieldAttributes(FieldAttributes.InitOnly)]
 		private static List<UnitEntityData> mod_m_UnitWaitAgentList = new List<UnitEntityData>();
 
+		#region DUPLICATES
 		[NewMember]
 		[DuplicatesBody("RunCommand")]
 		private static void source_RunCommand(UnitEntityData unit, Vector3 p, float? speedLimit, float orientation, float delay)
@@ -40,23 +35,18 @@ namespace KingmakerMods.Mods.Game.Toggles.NoManLeftBehind
 		{
 			throw new DeadEndException("source_MoveSelectedUnitsToPoint");
 		}
+		#endregion
 
 		[ModifiesMember("RunCommand")]
 		private static void mod_RunCommand(UnitEntityData unit, Vector3 p, float? speedLimit, float orientation, float delay)
 		{
-			if (!_cfgInit)
-			{
-				_cfgInit = true;
-				_useMod = UserConfig.Parser.GetValueAsBool("Game", "bNoManLeftBehind");
-			}
-
-			if (!_useMod)
+			if (!KingmakerPatchSettings.Game.NoManLeftBehind)
 			{
 				source_RunCommand(unit, p, speedLimit, orientation, delay);
 				return;
 			}
 
-			UnitMoveTo unitMoveTo = new UnitMoveTo(p, 0.3f) {MovementDelay = delay, Orientation = orientation, SpeedLimit = speedLimit, OverrideSpeed = speedLimit};
+			var unitMoveTo = new UnitMoveTo(p, 0.3f) {MovementDelay = delay, Orientation = orientation, SpeedLimit = speedLimit, OverrideSpeed = speedLimit};
 
 			unit.Commands.Run(unitMoveTo);
 
@@ -69,13 +59,7 @@ namespace KingmakerMods.Mods.Game.Toggles.NoManLeftBehind
 		[ModifiesMember("MoveSelectedUnitsToPoint")]
 		public static void mod_MoveSelectedUnitsToPoint(Vector3 worldPosition, Vector3 direction, bool preview = false, float formationSpaceFactor = 1f, Action<UnitEntityData, Vector3, float?, float, float> commandRunner = null)
 		{
-			if (!_cfgInit)
-			{
-				_cfgInit = true;
-				_useMod = UserConfig.Parser.GetValueAsBool("Game", "bNoManLeftBehind");
-			}
-
-			if (!_useMod)
+			if (!KingmakerPatchSettings.Game.NoManLeftBehind)
 			{
 				source_MoveSelectedUnitsToPoint(worldPosition, direction, preview, formationSpaceFactor, commandRunner);
 				return;
@@ -101,7 +85,7 @@ namespace KingmakerMods.Mods.Game.Toggles.NoManLeftBehind
 
 			float orientation = Mathf.Atan2(direction.x, direction.z) * 57.29578f;
 
-			float speedLimit = 0f;
+			var speedLimit = 0f;
 
 			if (selectedUnits.Count > 1)
 			{
@@ -113,9 +97,9 @@ namespace KingmakerMods.Mods.Game.Toggles.NoManLeftBehind
 				return;
 			}
 
-			int[] array = new int[allUnits.Count];
+			var array = new int[allUnits.Count];
 
-			for (int i = 0; i < array.Length; i++)
+			for (var i = 0; i < array.Length; i++)
 			{
 				array[i] = i;
 			}
@@ -124,9 +108,9 @@ namespace KingmakerMods.Mods.Game.Toggles.NoManLeftBehind
 
 			PartyFormationHelper.FillFormationPositions(worldPosition, FormationAnchor.Front, direction, allUnits, selectedUnits, formationSpaceFactor);
 
-			int count = 0;
+			var count = 0;
 
-			for (int i = 0; i < allUnits.Count; i++)
+			for (var i = 0; i < allUnits.Count; i++)
 			{
 				UnitEntityData unit = allUnits[i];
 
@@ -152,9 +136,9 @@ namespace KingmakerMods.Mods.Game.Toggles.NoManLeftBehind
 				count++;
 			}
 
-			float previousMagnitude = 0f;
+			var previousMagnitude = 0f;
 
-			for (int i = 0; i < allUnits.Count; i++)
+			for (var i = 0; i < allUnits.Count; i++)
 			{
 				UnitEntityData unit = allUnits[i];
 
@@ -171,7 +155,7 @@ namespace KingmakerMods.Mods.Game.Toggles.NoManLeftBehind
 				}
 			}
 
-			for (int i = 0; i < selectedUnits.Count; i++)
+			for (var i = 0; i < selectedUnits.Count; i++)
 			{
 				UnitEntityData selectedUnit = selectedUnits[i];
 

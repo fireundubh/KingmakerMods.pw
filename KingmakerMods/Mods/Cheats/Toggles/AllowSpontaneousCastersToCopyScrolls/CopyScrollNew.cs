@@ -17,23 +17,14 @@ namespace KingmakerMods.Mods.Cheats.Toggles.AllowSpontaneousCastersToCopyScrolls
 	[ModifiesType]
 	public class CopyScrollNew : CopyScroll
 	{
+		#region DUPLICATES
 		[NewMember]
-		private static bool _cfgInit;
-
-		[NewMember]
-		private static bool _useMod;
-
-		[NewMember]
-		private static bool IsModReady()
+		[DuplicatesBody("CanCopySpell")]
+		private static bool source_CanCopySpell([NotNull] BlueprintAbility spell, [NotNull] Spellbook spellbook)
 		{
-			if (!_cfgInit)
-			{
-				_cfgInit = true;
-				_useMod = UserConfig.Parser.GetValueAsBool("Cheats", "bAllowSpontaneousCastersToCopyScrolls");
-			}
-
-			return _useMod;
+			throw new DeadEndException("source_CanCopySpell");
 		}
+		#endregion
 
 		[NewMember]
 		public static string mod_GetSpellbookActionName(string actionName, ItemEntity item, UnitEntityData unit)
@@ -67,7 +58,7 @@ namespace KingmakerMods.Mods.Cheats.Toggles.AllowSpontaneousCastersToCopyScrolls
 		[NewMember]
 		public static BlueprintAbility mod_ExtractSpell([NotNull] ItemEntity item)
 		{
-			ItemEntityUsable itemEntityUsable = item as ItemEntityUsable;
+			var itemEntityUsable = item as ItemEntityUsable;
 
 			if (itemEntityUsable?.Blueprint.Type != UsableItemType.Scroll)
 			{
@@ -77,19 +68,10 @@ namespace KingmakerMods.Mods.Cheats.Toggles.AllowSpontaneousCastersToCopyScrolls
 			return itemEntityUsable.Blueprint.Ability.Parent ? itemEntityUsable.Blueprint.Ability.Parent : itemEntityUsable.Blueprint.Ability;
 		}
 
-		[NewMember]
-		[DuplicatesBody("CanCopySpell")]
-		private static bool source_CanCopySpell([NotNull] BlueprintAbility spell, [NotNull] Spellbook spellbook)
-		{
-			throw new DeadEndException("source_CanCopySpell");
-		}
-
 		[ModifiesMember("CanCopySpell")]
 		private static bool mod_CanCopySpell([NotNull] BlueprintAbility spell, [NotNull] Spellbook spellbook)
 		{
-			_useMod = IsModReady();
-
-			if (!_useMod)
+			if (!KingmakerPatchSettings.Cheats.AllowSpontaneousCastersToCopyScrolls)
 			{
 				return source_CanCopySpell(spell, spellbook);
 			}

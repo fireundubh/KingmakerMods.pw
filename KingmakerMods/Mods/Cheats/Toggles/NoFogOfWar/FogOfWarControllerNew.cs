@@ -8,29 +8,19 @@ namespace KingmakerMods.Mods.Cheats.Toggles.NoFogOfWar
 	[ModifiesType]
 	public class FogOfWarControllerNew : FogOfWarController
 	{
-		[NewMember]
-		private static bool _cfgInit;
-
-		[NewMember]
-		private static bool _useMod;
-
+		#region DUPLICATES
 		[NewMember]
 		[DuplicatesBody("Update")]
 		private void source_Update(EntityDataBase entity)
 		{
 			throw new DeadEndException("source_Update");
 		}
+		#endregion
 
 		[ModifiesMember("Update")]
 		private void Update(EntityDataBase entity)
 		{
-			if (!_cfgInit)
-			{
-				_cfgInit = true;
-				_useMod = UserConfig.Parser.GetValueAsBool("Cheats", "bDisableFogOfWar");
-			}
-
-			if (_useMod)
+			if (KingmakerPatchSettings.Cheats.DisableFogOfWar)
 			{
 				return;
 			}

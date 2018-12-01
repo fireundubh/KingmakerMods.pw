@@ -44,38 +44,23 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\SteamLibrary\Pathfinder Kingmaker\Kingmaker_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
-    <Reference Include="INIFileParser, Version=2.5.2.0, Culture=neutral, PublicKeyToken=79af7b307b65cf3c, processorArchitecture=MSIL">
-      <HintPath>..\packages\ini-parser.2.5.2\lib\net20\INIFileParser.dll</HintPath>
-    </Reference>
-    <Reference Include="Kingmaker.Import, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\SteamLibrary\Pathfinder Kingmaker\Kingmaker_Data\Managed\Kingmaker.Import.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\SteamLibrary\Pathfinder Kingmaker\Kingmaker_Data\Managed\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="Patchwork.Attributes">
-      <HintPath>..\Patchwork.Engine\bin\Debug\Patchwork.Attributes.dll</HintPath>
-    </Reference>
-    <Reference Include="Patchwork.Engine">
-      <HintPath>..\Patchwork.Engine\bin\Debug\Patchwork.Engine.dll</HintPath>
+    <Reference Include="Patchwork.Attributes, Version=0.9.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\KingmakerMods.pw Launcher\Patchwork.Attributes\bin\Release\Patchwork.Attributes.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
+    <Reference Include="Unity.Analytics.DataPrivacy, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\SteamLibrary\Pathfinder Kingmaker\Kingmaker_Data\Managed\Unity.Analytics.DataPrivacy.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\SteamLibrary\Pathfinder Kingmaker\Kingmaker_Data\Managed\UnityEngine.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.AnimationModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\SteamLibrary\Pathfinder Kingmaker\Kingmaker_Data\Managed\UnityEngine.AnimationModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -89,6 +74,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\SteamLibrary\Pathfinder Kingmaker\Kingmaker_Data\Managed\UnityEngine.UIModule.dll</HintPath>
     </Reference>
+    <Reference Include="UserConfig">
+      <HintPath>..\..\UserConfig\UserConfig\bin\Release\UserConfig.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helpers\DeadEndException.cs" />
@@ -98,9 +86,12 @@
     <Compile Include="Mods\Cheats\Toggles\InstantCooldowns\UnitCooldownsHelper.cs" />
     <Compile Include="Mods\Cheats\Toggles\InstantCooldowns\UnitActivatableAbilitiesControllerNew.cs" />
     <Compile Include="Mods\Cheats\Toggles\InstantCooldowns\UnitCommandNew.cs" />
+    <Compile Include="Mods\Cheats\Toggles\InstantPartyChange\GlobalMapRulesNew.cs" />
+    <Compile Include="Mods\Cheats\Toggles\InstantPartyChange\IngameMenuManagerNew.cs" />
     <Compile Include="Mods\Cheats\Toggles\NeverFailSkillChecks\RulePartySkillCheckNew.cs" />
     <Compile Include="Mods\Cheats\Toggles\NeverFailSkillChecks\RuleSkillCheckNew.cs" />
     <Compile Include="Mods\Cheats\Toggles\NeverFailSkillChecks\StaticEntityDataNew.cs" />
+    <Compile Include="Mods\Cheats\Toggles\Undetectable\StealthSwitchButtonNew.cs" />
     <Compile Include="Mods\UI\Configurables\HighlightObjectsToggle\InteractionHighlightControllerNew.cs" />
     <Compile Include="Mods\UI\Configurables\HighlightObjectsToggle\KeyboardAccessNew.cs" />
     <Compile Include="Mods\Fixes\Familiar.cs" />
@@ -166,7 +157,6 @@
     <Compile Include="Mods\Cheats\Toggles\InfiniteSpellUse\SpellbookNew.cs" />
     <Compile Include="Mods\Game\Toggles\NoManLeftBehind\ClickGroundHandlerNew.cs" />
     <Compile Include="Mods\Game\Configurables\CompanionCost\PlayerNew.cs" />
-    <Compile Include="Mods\Cheats\Toggles\Undetectable\UnitStealthControllerNew.cs" />
     <Compile Include="KingmakerPatchInfo.cs" />
     <Compile Include="Mods\Cheats\Toggles\AlwaysUnencumbered\DescriptionTemplatesEncumbranceNew.cs" />
     <Compile Include="Mods\Game\Toggles\Achievements\AchievementsManagerNew.cs" />
@@ -181,12 +171,10 @@
     <Compile Include="Mods\UI\Toggles\CopyScrollBookName\DescriptionTemplatesItemNew.cs" />
     <Compile Include="Mods\UI\Toggles\CopyScrollBookName\ItemSlotNew.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UserConfig\Parser.cs" />
-    <Compile Include="UserConfig\Utilities.cs" />
+    <Compile Include="KingmakerPatchSettings.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="KingmakerMods.ruleset" />
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

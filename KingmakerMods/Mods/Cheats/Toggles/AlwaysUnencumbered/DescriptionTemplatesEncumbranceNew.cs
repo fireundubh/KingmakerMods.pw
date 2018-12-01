@@ -9,29 +9,19 @@ namespace KingmakerMods.Mods.Cheats.Toggles.AlwaysUnencumbered
 	[ModifiesType]
 	public class DescriptionTemplatesEncumbranceNew : DescriptionTemplatesEncumbrance
 	{
-		[NewMember]
-		private static bool _cfgInit;
-
-		[NewMember]
-		private static bool _useMod;
-
+		#region DUPLICATES
 		[NewMember]
 		[DuplicatesBody("EncumbrancePartyPenalty")]
 		public void source_EncumbrancePartyPenalty(DescriptionBricksBox box, EncumbranceHelper.CarryingCapacity capacity)
 		{
 			throw new DeadEndException("source_EncumbrancePartyPenalty");
 		}
+		#endregion
 
 		[ModifiesMember("EncumbrancePartyPenalty")]
 		public void mod_EncumbrancePartyPenalty(DescriptionBricksBox box, EncumbranceHelper.CarryingCapacity capacity)
 		{
-			if (!_cfgInit)
-			{
-				_cfgInit = true;
-				_useMod = UserConfig.Parser.GetValueAsBool("Cheats", "bAlwaysUnencumbered");
-			}
-
-			if (!_useMod)
+			if (!KingmakerPatchSettings.Cheats.AlwaysUnencumbered)
 			{
 				this.source_EncumbrancePartyPenalty(box, capacity);
 				return;

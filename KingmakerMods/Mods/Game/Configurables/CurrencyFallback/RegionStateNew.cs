@@ -12,29 +12,19 @@ namespace KingmakerMods.Mods.Game.Configurables.CurrencyFallback
 	[ModifiesType]
 	public class RegionStateNew : RegionState
 	{
-		[NewMember]
-		private static bool _cfgInit;
-
-		[NewMember]
-		private static bool _useMod;
-
+		#region DUPLICATES
 		[NewMember]
 		[DuplicatesBody("FoundSettlement")]
 		public void source_FoundSettlement(RegionSettlementLocation settlementLocation, string name = null)
 		{
 			throw new DeadEndException("source_FoundSettlement");
 		}
+		#endregion
 
 		[ModifiesMember("FoundSettlement")]
 		public void mod_FoundSettlement(RegionSettlementLocation settlementLocation, string name = null)
 		{
-			if (!_cfgInit)
-			{
-				_cfgInit = true;
-				_useMod = UserConfig.Parser.GetValueAsBool("Game.KingdomEvents", "bCurrencyFallback");
-			}
-
-			if (!_useMod)
+			if (!KingmakerPatchSettings.CurrencyFallback.Enabled)
 			{
 				this.source_FoundSettlement(settlementLocation, name);
 				return;
@@ -48,7 +38,7 @@ namespace KingmakerMods.Mods.Game.Configurables.CurrencyFallback
 
 			if (this.Settlement != null)
 			{
-				UberDebug.LogError("Cannot found a settlement in {0}: alreaady built", settlementLocation);
+				UberDebug.LogError("Cannot found a settlement in {0}: already built", settlementLocation);
 				return;
 			}
 
@@ -60,13 +50,16 @@ namespace KingmakerMods.Mods.Game.Configurables.CurrencyFallback
 
 			if (settlementLocation == null && this.Blueprint.SettlementGlobalmapLocations.Length == 0)
 			{
-				UberDebug.LogError("Cannot found a settlement in {0}: no location spicified and no default found", this.Blueprint);
+				UberDebug.LogError("Cannot found a settlement in {0}: no location specified and no default found", this.Blueprint);
 				return;
 			}
 
 			KingdomCurrencyFallback.SpendPoints(KingdomRoot.Instance.SettlementBPCost);
 
-			SettlementState settlementState = new SettlementState(SettlementState.LevelType.Village) {Region = this};
+			var settlementState = new SettlementState(SettlementState.LevelType.Village)
+			{
+				Region = this
+			};
 
 			SettlementState settlementState2 = settlementState;
 

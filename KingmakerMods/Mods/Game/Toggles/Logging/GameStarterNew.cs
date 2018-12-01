@@ -11,29 +11,19 @@ namespace KingmakerMods.Mods.Game.Toggles.Logging
 	[ModifiesType]
 	public class GameStarterNew : GameStarter
 	{
-		[NewMember]
-		private static bool _cfgInit;
-
-		[NewMember]
-		private static bool _useMod;
-
+		#region DUPLICATES
 		[NewMember]
 		[DuplicatesBody("Awake")]
 		public void source_Awake()
 		{
 			throw new DeadEndException("source_Awake");
 		}
+		#endregion
 
 		[ModifiesMember("Awake")]
 		public void mod_Awake()
 		{
-			if (!_cfgInit)
-			{
-				_cfgInit = true;
-				_useMod = UserConfig.Parser.GetValueAsBool("Game", "bLogging");
-			}
-
-			if (!_useMod)
+			if (!KingmakerPatchSettings.Game.Logging)
 			{
 				this.source_Awake();
 				return;

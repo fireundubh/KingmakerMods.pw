@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Kingmaker.Controllers.GlobalMap;
 using Kingmaker.ElementsSystem;
 using Kingmaker.Globalmap;
 using Kingmaker.Globalmap.Blueprints;
 using Kingmaker.Globalmap.State;
-using Kingmaker.Utility;
 using KingmakerMods.Helpers;
 using Patchwork;
 
@@ -15,21 +13,17 @@ namespace KingmakerMods.Mods.Cheats.Toggles.Abracadabra
 	[ModifiesType]
 	public class LocationRevealControllerNew : LocationRevealController
 	{
-		[NewMember]
-		private static bool _cfgInit;
-
-		[NewMember]
-		private static bool _useMod;
-
+		#region DUPLICATES
 		[NewMember]
 		[DuplicatesBody("Tick")]
 		public void source_Tick()
 		{
 			throw new DeadEndException("source_Tick");
 		}
+		#endregion
 
 		[NewMember]
-		private bool IsHiddenOrWaypoint(LocationData location)
+		private static bool IsHiddenOrWaypoint(LocationData location)
 		{
 			switch (location.Blueprint.Type)
 			{
@@ -45,13 +39,7 @@ namespace KingmakerMods.Mods.Cheats.Toggles.Abracadabra
 		[ModifiesMember("Tick")]
 		public void mod_Tick()
 		{
-			if (!_cfgInit)
-			{
-				_cfgInit = true;
-				_useMod = UserConfig.Parser.GetValueAsBool("Cheats", "bAbracadabra");
-			}
-
-			if (!_useMod)
+			if (!KingmakerPatchSettings.Cheats.Abracadabra)
 			{
 				this.source_Tick();
 				return;
@@ -63,7 +51,7 @@ namespace KingmakerMods.Mods.Cheats.Toggles.Abracadabra
 
 			// don't run foreach on tick if we don't have to
 			// this will return true until all locations, except hidden locations and waypoints, are revealed
-			bool canRevealLocations = locations.Any(l => !l.IsRevealed && !this.IsHiddenOrWaypoint(l));
+			bool canRevealLocations = locations.Any(l => !l.IsRevealed && !IsHiddenOrWaypoint(l));
 
 			if (!canRevealLocations)
 			{
@@ -92,12 +80,6 @@ namespace KingmakerMods.Mods.Cheats.Toggles.Abracadabra
 				switch (type)
 				{
 					case LocationType.Location:
-						if (!possibleToRevealCondition.HasConditions || possibleToRevealCondition.Check())
-						{
-							GlobalMapRules.Instance.RevealLocation(locationObject);
-						}
-
-						break;
 					case LocationType.Landmark:
 						if (!possibleToRevealCondition.HasConditions || possibleToRevealCondition.Check())
 						{

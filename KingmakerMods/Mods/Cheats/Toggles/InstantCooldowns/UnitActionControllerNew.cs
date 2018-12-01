@@ -8,27 +8,7 @@ namespace KingmakerMods.Mods.Cheats.Toggles.InstantCooldowns
 	[ModifiesType]
 	public class UnitActionControllerNew : UnitActionController
 	{
-		#region CONFIGURATION
-		[NewMember]
-		private static bool _cfgInit;
-
-		[NewMember]
-		private static bool _useMod;
-
-		[NewMember]
-		private static bool IsModReady()
-		{
-			if (!_cfgInit)
-			{
-				_cfgInit = true;
-				_useMod = UserConfig.Parser.GetValueAsBool("Cheats", "bInstantCooldowns");
-			}
-
-			return _useMod;
-		}
-		#endregion
-
-		#region DUPLICATED METHODS
+		#region DUPLICATES
 		[NewMember]
 		[DuplicatesBody("UpdateCooldowns")]
 		public void source_UpdateCooldowns(UnitCommand command)
@@ -40,15 +20,13 @@ namespace KingmakerMods.Mods.Cheats.Toggles.InstantCooldowns
 		[ModifiesMember("UpdateCooldowns")]
 		public void mod_UpdateCooldowns(UnitCommand command)
 		{
-			_useMod = IsModReady();
-
-			if (!_useMod)
+			if (!KingmakerPatchSettings.Cheats.InstantCooldowns)
 			{
 				this.source_UpdateCooldowns(command);
 				return;
 			}
 
-			if (_useMod && command.Executor.IsDirectlyControllable)
+			if (command.Executor.IsDirectlyControllable)
 			{
 				return;
 			}

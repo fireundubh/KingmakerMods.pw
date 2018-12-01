@@ -10,29 +10,19 @@ namespace KingmakerMods.Mods.Cheats.Toggles.NoFogOfWar
 	[ModifiesType]
 	public class FogOfWarRendererNew : FogOfWarRenderer
 	{
-		[NewMember]
-		private static bool _cfgInit;
-
-		[NewMember]
-		private static bool _useMod;
-
+		#region DUPLICATES
 		[NewMember]
 		[DuplicatesBody("Update")]
 		public void source_Update()
 		{
 			throw new DeadEndException("source_Update");
 		}
+		#endregion
 
 		[ModifiesMember("Update")]
 		public void mod_Update()
 		{
-			if (!_cfgInit)
-			{
-				_cfgInit = true;
-				_useMod = UserConfig.Parser.GetValueAsBool("Cheats", "bDisableFogOfWar");
-			}
-
-			if (_useMod)
+			if (KingmakerPatchSettings.Cheats.DisableFogOfWar)
 			{
 				Shader.SetGlobalFloat("_FogOfWarGlobalFlag", 0);
 				return;

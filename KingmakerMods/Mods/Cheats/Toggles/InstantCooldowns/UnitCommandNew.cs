@@ -10,27 +10,7 @@ namespace KingmakerMods.Mods.Cheats.Toggles.InstantCooldowns
 	[ModifiesType]
 	public abstract class UnitCommandNew : UnitCommand
 	{
-		#region CONFIGURATION
-		[NewMember]
-		private static bool _cfgInit;
-
-		[NewMember]
-		private static bool _useMod;
-
-		[NewMember]
-		private static bool IsModReady()
-		{
-			if (!_cfgInit)
-			{
-				_cfgInit = true;
-				_useMod = UserConfig.Parser.GetValueAsBool("Cheats", "bInstantCooldowns");
-			}
-
-			return _useMod;
-		}
-		#endregion
-
-		#region DUPLICATED METHODS
+		#region DUPLICATES
 		[NewMember]
 		[DuplicatesBody("get_IsIgnoreCooldown")]
 		public bool source_get_IsIgnoreCooldown()
@@ -45,9 +25,7 @@ namespace KingmakerMods.Mods.Cheats.Toggles.InstantCooldowns
 			[ModifiesMember("get_IsIgnoreCooldown")]
 			get
 			{
-				_useMod = IsModReady();
-
-				if (_useMod && this.Executor.IsDirectlyControllable)
+				if (KingmakerPatchSettings.Cheats.InstantCooldowns && this.Executor.IsDirectlyControllable)
 				{
 					return true;
 				}

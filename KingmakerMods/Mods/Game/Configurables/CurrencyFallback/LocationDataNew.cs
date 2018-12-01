@@ -13,29 +13,19 @@ namespace KingmakerMods.Mods.Game.Configurables.CurrencyFallback
 	[ModifiesType]
 	public class LocationDataNew : LocationData
 	{
-		[NewMember]
-		private static bool _cfgInit;
-
-		[NewMember]
-		private static bool _useMod;
-
+		#region DUPLICATES
 		[NewMember]
 		[DuplicatesBody("ClaimResource")]
 		public void source_ClaimResource()
 		{
 			throw new DeadEndException("ClaimResource");
 		}
+		#endregion
 
 		[ModifiesMember("ClaimResource")]
 		public void mod_ClaimResource()
 		{
-			if (!_cfgInit)
-			{
-				_cfgInit = true;
-				_useMod = UserConfig.Parser.GetValueAsBool("Game.KingdomEvents", "bCurrencyFallback");
-			}
-
-			if (!_useMod)
+			if (!KingmakerPatchSettings.CurrencyFallback.Enabled)
 			{
 				this.source_ClaimResource();
 				return;

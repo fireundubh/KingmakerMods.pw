@@ -9,29 +9,19 @@ namespace KingmakerMods.Mods.Game.Toggles.RestAnywhere
 	[ModifiesType]
 	public class RestControllerNew : RestController
 	{
-		[NewMember]
-		private static bool _cfgInit;
-
-		[NewMember]
-		private static bool _useMod;
-
+		#region DUPLICATES
 		[NewMember]
 		[DuplicatesBody("CanRest")]
 		public static bool source_CanRest(TimeSpan restTime)
 		{
 			throw new DeadEndException("source_CanRest");
 		}
+		#endregion
 
 		[ModifiesMember("CanRest")]
 		public static bool mod_CanRest(TimeSpan restTime)
 		{
-			if (!_cfgInit)
-			{
-				_cfgInit = true;
-				_useMod = UserConfig.Parser.GetValueAsBool("Game", "bRestAnywhere");
-			}
-
-			if (!_useMod)
+			if (!KingmakerPatchSettings.Game.RestAnywhere)
 			{
 				return source_CanRest(restTime);
 			}
@@ -49,9 +39,10 @@ namespace KingmakerMods.Mods.Game.Toggles.RestAnywhere
 //				return false;
 //			}
 
+			bool huntersAssigned = Kingmaker.Game.Instance.Player.Camping.Hunters.Count > 0;
+
 			int rationsCount = Kingmaker.Game.Instance.Player.Inventory.Count(Kingmaker.Game.Instance.BlueprintRoot.RestItem);
 			int neededRations = CalculateNeededRations(restTime);
-			bool huntersAssigned = Kingmaker.Game.Instance.Player.Camping.Hunters.Count > 0;
 
 			return huntersAssigned || rationsCount >= neededRations;
 		}

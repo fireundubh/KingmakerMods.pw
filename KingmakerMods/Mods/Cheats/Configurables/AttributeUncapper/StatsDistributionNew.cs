@@ -12,15 +12,7 @@ namespace KingmakerMods.Mods.Cheats.Configurables.AttributeUncapper
 	[ModifiesType]
 	public class StatsDistributionNew : StatsDistribution
 	{
-		[NewMember]
-		private static bool _cfgInit;
-
-		[NewMember]
-		private static bool _useMod;
-
-		[NewMember]
-		private static int _attributeMax;
-
+		#region DUPLICATES
 		[NewMember]
 		[DuplicatesBody("GetAddCost")]
 		public int source_GetAddCost(StatType attribute)
@@ -34,6 +26,7 @@ namespace KingmakerMods.Mods.Cheats.Configurables.AttributeUncapper
 		{
 			throw new DeadEndException("source_GetAddCost");
 		}
+		#endregion
 
 		[ModifiesMember("GetAddCost")]
 		public int mod_GetAddCost(StatType attribute)
@@ -74,26 +67,16 @@ namespace KingmakerMods.Mods.Cheats.Configurables.AttributeUncapper
 		[ModifiesMember("CanAdd")]
 		public bool mod_CanAdd(StatType attribute)
 		{
-			if (!_cfgInit)
-			{
-				_cfgInit = true;
-				_useMod = UserConfig.Parser.GetValueAsBool("Cheats.AttributeUncapper", "bEnabled");
-				_attributeMax = UserConfig.Parser.GetValueAsInt("Cheats.AttributeUncapper", "iAttributeMax");
-			}
-
 			if (!this.Available)
 			{
 				return false;
 			}
 
-			if (!_useMod || _attributeMax <= 18)
-			{
-				_attributeMax = 18;
-			}
-
 			int attributeValue = this.StatValues[attribute];
 
-			return attributeValue < _attributeMax && this.mod_GetAddCost(attribute) <= this.Points;
+			int attributeMax = KingmakerPatchSettings.AttributeUncapper.Enabled ? KingmakerPatchSettings.AttributeUncapper.AttributeMax : 18;
+
+			return attributeValue < attributeMax && this.mod_GetAddCost(attribute) <= this.Points;
 		}
 	}
 }

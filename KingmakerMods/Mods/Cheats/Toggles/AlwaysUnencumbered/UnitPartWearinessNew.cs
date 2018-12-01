@@ -7,29 +7,25 @@ namespace KingmakerMods.Mods.Cheats.Toggles.AlwaysUnencumbered
 	[ModifiesType]
 	public class UnitPartWearinessNew : UnitPartWeariness
 	{
-		[NewMember]
-		private static bool _cfgInit;
-
-		[NewMember]
-		private static bool _useMod;
-
+		#region DUPLICATES
 		[NewMember]
 		[DuplicatesBody("GetFatigueHoursModifier")]
 		public static float source_GetFatigueHoursModifier()
 		{
 			throw new DeadEndException("GetFatigueHoursModifier");
 		}
+		#endregion
 
 		[ModifiesMember("GetFatigueHoursModifier")]
 		public static float mod_GetFatigueHoursModifier()
 		{
-			if (!_cfgInit)
+			// ReSharper disable once ConvertIfStatementToReturnStatement
+			if (KingmakerPatchSettings.Cheats.AlwaysUnencumbered)
 			{
-				_cfgInit = true;
-				_useMod = UserConfig.Parser.GetValueAsBool("Cheats", "bAlwaysUnencumbered");
+				return 1f;
 			}
 
-			return _useMod ? 1f : source_GetFatigueHoursModifier();
+			return source_GetFatigueHoursModifier();
 		}
 	}
 }

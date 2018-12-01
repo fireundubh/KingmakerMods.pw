@@ -14,34 +14,24 @@ namespace KingmakerMods.Mods.Cheats.Toggles.InfiniteItemUse
 	[ModifiesType]
 	public class ItemEntityNew : ItemEntity
 	{
-		[NewMember]
-		private static bool _cfgInit;
-
-		[NewMember]
-		private static bool _useMod;
-
+		#region DUPLICATES
 		[NewMember]
 		[DuplicatesBody("SpendCharges")]
 		public bool source_SpendCharges(UnitDescriptor user)
 		{
 			throw new DeadEndException("source_SpendCharges");
 		}
+		#endregion
 
 		[ModifiesMember("SpendCharges")]
 		public bool mod_SpendCharges(UnitDescriptor user)
 		{
-			if (!_cfgInit)
-			{
-				_cfgInit = true;
-				_useMod = UserConfig.Parser.GetValueAsBool("Cheats", "bInfiniteItemUse");
-			}
-
-			if (!_useMod)
+			if (!KingmakerPatchSettings.Cheats.InfiniteItemUse)
 			{
 				return this.source_SpendCharges(user);
 			}
 
-			BlueprintItemEquipment blueprintItemEquipment = this.Blueprint as BlueprintItemEquipment;
+			var blueprintItemEquipment = this.Blueprint as BlueprintItemEquipment;
 
 			if (!blueprintItemEquipment || !blueprintItemEquipment.GainAbility)
 			{
@@ -54,15 +44,15 @@ namespace KingmakerMods.Mods.Cheats.Toggles.InfiniteItemUse
 				return true;
 			}
 
-			bool hasCharges = false;
+			var hasCharges = false;
 
 			if (this.Charges > 0)
 			{
-				ItemEntityUsable itemEntityUsable = new ItemEntityUsable((BlueprintItemEquipmentUsable) this.Blueprint);
+				var itemEntityUsable = new ItemEntityUsable((BlueprintItemEquipmentUsable) this.Blueprint);
 
 				if (user.State.Features.HandOfMagusDan && itemEntityUsable.Blueprint.Type == UsableItemType.Scroll)
 				{
-					RuleRollDice ruleRollDice = new RuleRollDice(user.Unit, new DiceFormula(1, DiceType.D100));
+					var ruleRollDice = new RuleRollDice(user.Unit, new DiceFormula(1, DiceType.D100));
 
 					Rulebook.Trigger(ruleRollDice);
 

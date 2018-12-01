@@ -8,24 +8,20 @@ namespace KingmakerMods.Mods.Game.Configurables.CurrencyFallback
 	[NewType]
 	public static class KingdomCurrencyFallback
 	{
-		private static int _currencyMult;
-
 		public static bool CanSpend(int pointCost)
 		{
-			_currencyMult = UserConfig.Parser.GetValueAsInt("Game.KingdomEvents", "iCurrencyMultiplier");
-
 			if (KingdomState.Instance.BP - pointCost >= 0)
 			{
 				return true;
 			}
 
-			return KingdomState.Instance.BP * _currencyMult + Kingmaker.Game.Instance.Player.Money - pointCost * _currencyMult >= 0;
+			int currencyMult = KingmakerPatchSettings.CurrencyFallback.CurrencyMultiplier;
+
+			return KingdomState.Instance.BP * currencyMult + Kingmaker.Game.Instance.Player.Money - pointCost * currencyMult >= 0;
 		}
 
 		public static bool SpendPoints(int pointCost)
 		{
-			_currencyMult = UserConfig.Parser.GetValueAsInt("Game.KingdomEvents", "iCurrencyMultiplier");
-
 			int pointDebt = KingdomState.Instance.BP - pointCost;
 
 			if (pointDebt >= 0)
@@ -36,7 +32,7 @@ namespace KingmakerMods.Mods.Game.Configurables.CurrencyFallback
 
 			int pointCostNew = pointCost - Mathf.Abs(pointDebt);
 
-			int goldCost = Mathf.Abs(pointDebt) * _currencyMult;
+			int goldCost = Mathf.Abs(pointDebt) * KingmakerPatchSettings.CurrencyFallback.CurrencyMultiplier;
 
 			if (!Kingmaker.Game.Instance.Player.SpendMoney(goldCost))
 			{
@@ -49,8 +45,6 @@ namespace KingmakerMods.Mods.Game.Configurables.CurrencyFallback
 
 		public static Tuple<int, int> SplitCost(int pointCost)
 		{
-			_currencyMult = UserConfig.Parser.GetValueAsInt("Game.KingdomEvents", "iCurrencyMultiplier");
-
 			int pointDebt = KingdomState.Instance.BP - pointCost;
 
 			if (pointDebt >= 0)
@@ -60,7 +54,7 @@ namespace KingmakerMods.Mods.Game.Configurables.CurrencyFallback
 
 			int pointCostNew = pointCost - Mathf.Abs(pointDebt);
 
-			int goldCost = Mathf.Abs(pointDebt) * _currencyMult;
+			int goldCost = Mathf.Abs(pointDebt) * KingmakerPatchSettings.CurrencyFallback.CurrencyMultiplier;
 
 			return new Tuple<int, int>(pointCostNew, goldCost);
 		}

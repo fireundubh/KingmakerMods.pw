@@ -11,27 +11,7 @@ namespace KingmakerMods.Mods.Cheats.Toggles.NeverFailSkillChecks
 	[ModifiesType]
 	public class RuleSkillCheckNew : RuleSkillCheck
 	{
-		#region CONFIGURATION
-		[NewMember]
-		private static bool _cfgInit;
-
-		[NewMember]
-		private static bool _useMod;
-
-		[NewMember]
-		private static bool IsModReady()
-		{
-			if (!_cfgInit)
-			{
-				_cfgInit = true;
-				_useMod = UserConfig.Parser.GetValueAsBool("Cheats", "bNeverFailSkillChecks");
-			}
-
-			return _useMod;
-		}
-		#endregion
-
-		#region DUPLICATED METHODS
+		#region DUPLICATES
 		[NewMember]
 		[DuplicatesBody("get_IsPassed")]
 		public bool source_get_IsPassed()
@@ -46,9 +26,8 @@ namespace KingmakerMods.Mods.Cheats.Toggles.NeverFailSkillChecks
 			[ModifiesMember("get_IsPassed")]
 			get
 			{
-				_useMod = IsModReady();
-
-				if (_useMod)
+				// ReSharper disable once ConvertIfStatementToReturnStatement
+				if (KingmakerPatchSettings.Cheats.NeverFailSkillChecks)
 				{
 					return true;
 				}

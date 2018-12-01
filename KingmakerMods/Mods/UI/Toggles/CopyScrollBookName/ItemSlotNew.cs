@@ -12,30 +12,14 @@ namespace KingmakerMods.Mods.UI.Toggles.CopyScrollBookName
 	[ModifiesType]
 	public class ItemSlotNew : ItemSlot
 	{
-		[NewMember]
-		private static bool _cfgInit;
-
-		[NewMember]
-		private static bool _useMod;
-
-		[NewMember]
-		private static bool IsModReady()
-		{
-			if (!_cfgInit)
-			{
-				_cfgInit = true;
-				_useMod = UserConfig.Parser.GetValueAsBool("UI", "bAddSpellbookNameToCopyScrollAction");
-			}
-
-			return _useMod;
-		}
-
+		#region DUPLICATES
 		[NewMember]
 		[DuplicatesBody("get_ScrollContent")]
 		public string source_get_ScrollContent()
 		{
 			throw new DeadEndException("source_get_ScrollContent");
 		}
+		#endregion
 
 		[ModifiesMember("ScrollContent")]
 		public string mod_ScrollContent
@@ -43,16 +27,14 @@ namespace KingmakerMods.Mods.UI.Toggles.CopyScrollBookName
 			[ModifiesMember("get_ScrollContent")]
 			get
 			{
-				_useMod = IsModReady();
-
-				if (!_useMod)
+				if (!KingmakerPatchSettings.UI.AddSpellbookNameToCopyScrollAction)
 				{
 					return this.source_get_ScrollContent();
 				}
 
 				UnitEntityData currentCharacter = UIUtility.GetCurrentCharacter();
 
-				CopyItem component = this.Item.Blueprint.GetComponent<CopyItem>();
+				var component = this.Item.Blueprint.GetComponent<CopyItem>();
 
 				string actionName = component?.GetActionName(currentCharacter) ?? string.Empty;
 

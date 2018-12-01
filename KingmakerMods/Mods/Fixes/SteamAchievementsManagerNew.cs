@@ -11,21 +11,23 @@ namespace KingmakerMods.Mods.Fixes
 	[ModifiesType]
 	public class SteamAchievementsManagerNew : SteamAchievementsManager
 	{
+		#region ALIASES
 		[ModifiesMember("m_UserStatsReceived", ModificationScope.Nothing)]
-		private Callback<UserStatsReceived_t> source_m_UserStatsReceived;
+		private Callback<UserStatsReceived_t> alias_m_UserStatsReceived;
 
 		[ModifiesMember("m_UserStatsStored", ModificationScope.Nothing)]
-		private Callback<UserStatsStored_t> source_m_UserStatsStored;
+		private Callback<UserStatsStored_t> alias_m_UserStatsStored;
 
 		[ModifiesMember("m_UserAchievementStored", ModificationScope.Nothing)]
-		private Callback<UserAchievementStored_t> source_m_UserAchievementStored;
+		private Callback<UserAchievementStored_t> alias_m_UserAchievementStored;
+		#endregion
 
 		[ModifiesMember("OnDisable")]
 		private void mod_OnDisable()
 		{
-			this.source_m_UserStatsReceived?.Dispose();
-			this.source_m_UserStatsStored?.Dispose();
-			this.source_m_UserAchievementStored?.Dispose();
+			this.alias_m_UserStatsReceived?.Dispose();
+			this.alias_m_UserStatsStored?.Dispose();
+			this.alias_m_UserAchievementStored?.Dispose();
 		}
 	}
 }

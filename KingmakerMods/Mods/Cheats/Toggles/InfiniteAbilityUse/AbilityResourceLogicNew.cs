@@ -9,31 +9,21 @@ namespace KingmakerMods.Mods.Cheats.Toggles.InfiniteAbilityUse
 	[ModifiesType]
 	public class AbilityResourceLogicNew : AbilityResourceLogic
 	{
-		[NewMember]
-		private static bool _cfgInit;
-
-		[NewMember]
-		private static bool _useMod;
-
+		#region DUPLICATES
 		[NewMember]
 		[DuplicatesBody("Spend")]
 		public void source_Spend(AbilityData ability)
 		{
 			throw new DeadEndException("source_Spend");
 		}
+		#endregion
 
 		[ModifiesMember("Spend")]
 		public void mod_Spend(AbilityData ability)
 		{
-			if (!_cfgInit)
-			{
-				_cfgInit = true;
-				_useMod = UserConfig.Parser.GetValueAsBool("Cheats", "bInfiniteAbilityUse");
-			}
-
 			UnitEntityData unit = ability.Caster.Unit;
 
-			if (_useMod && unit?.IsPlayerFaction == true)
+			if (KingmakerPatchSettings.Cheats.InfiniteAbilityUse && unit?.IsPlayerFaction == true)
 			{
 				return;
 			}

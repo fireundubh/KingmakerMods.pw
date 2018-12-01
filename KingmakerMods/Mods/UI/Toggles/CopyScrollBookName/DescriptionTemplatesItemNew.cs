@@ -12,37 +12,19 @@ namespace KingmakerMods.Mods.UI.Toggles.CopyScrollBookName
 	[ModifiesType]
 	public class DescriptionTemplatesItemNew : DescriptionTemplatesItem
 	{
-		[NewMember]
-		private static bool _cfgInit;
-
-		[NewMember]
-		private static bool _useMod;
-
-		[NewMember]
-		private static bool IsModReady()
-		{
-			if (!_cfgInit)
-			{
-				_cfgInit = true;
-				_useMod = UserConfig.Parser.GetValueAsBool("UI", "bAddSpellbookNameToCopyScrollAction");
-			}
-
-			return _useMod;
-		}
-
+		#region DUPLICATES
 		[NewMember]
 		[DuplicatesBody("CopyButton")]
 		public void source_CopyButton(DescriptionBricksBox box, TooltipData data, bool isTooltip)
 		{
 			throw new DeadEndException("source_CopyButton");
 		}
+		#endregion
 
 		[ModifiesMember("CopyButton")]
 		public void mod_CopyButton(DescriptionBricksBox box, TooltipData data, bool isTooltip)
 		{
-			_useMod = IsModReady();
-
-			if (!_useMod)
+			if (!KingmakerPatchSettings.UI.AddSpellbookNameToCopyScrollAction)
 			{
 				this.source_CopyButton(box, data, isTooltip);
 				return;
@@ -54,6 +36,7 @@ namespace KingmakerMods.Mods.UI.Toggles.CopyScrollBookName
 			}
 
 			UnitEntityData unit = UIUtility.GetCurrentCharacter();
+
 			var component = data.Item.Blueprint.GetComponent<CopyItem>();
 
 			if (component == null || !component.CanCopy(data.Item, unit) || !Kingmaker.Game.Instance.Player.Inventory.Contains(data.Item.Blueprint) || isTooltip)

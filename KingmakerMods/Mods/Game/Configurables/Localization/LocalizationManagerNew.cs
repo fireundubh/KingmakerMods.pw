@@ -16,14 +16,14 @@ namespace KingmakerMods.Mods.Game.Configurables.Localization
 	public class LocalizationManagerNew : LocalizationManager
 	{
 		[ModifiesMember("s_CurrentLocale", ModificationScope.Nothing)]
-		private static Locale source_s_CurrentLocale;
+		private static Locale alias_s_CurrentLocale;
 
 		[NewMember]
 		private static void LoadPacks()
 		{
 			List<LocalizationPack> currentPacks = new List<LocalizationPack>();
 
-			DirectoryInfo directoryInfo = new DirectoryInfo(Path.Combine(Application.dataPath, "Mods", "Localization/" + LocalizationManagerNew.source_s_CurrentLocale));
+			DirectoryInfo directoryInfo = new DirectoryInfo(Path.Combine(Application.dataPath, "Mods", "Localization/" + LocalizationManagerNew.alias_s_CurrentLocale));
 			FileInfo[] files;
 
 			try
@@ -76,37 +76,37 @@ namespace KingmakerMods.Mods.Game.Configurables.Localization
 		public static Locale mod_CurrentLocale
 		{
 			[ModifiesMember("get_CurrentLocale")]
-			get { return LocalizationManagerNew.source_s_CurrentLocale; }
+			get { return LocalizationManagerNew.alias_s_CurrentLocale; }
 			[ModifiesMember("set_CurrentLocale")]
 			set
 			{
-				Locale locale = LocalizationManagerNew.source_s_CurrentLocale;
+				Locale locale = LocalizationManagerNew.alias_s_CurrentLocale;
 
-				LocalizationManagerNew.source_s_CurrentLocale = value;
+				LocalizationManagerNew.alias_s_CurrentLocale = value;
 
 				PlayerPrefs.SetString("LocalePref", value.ToString());
 
 				if (Application.isPlaying)
 				{
-					LocalizationManagerNew.CurrentPack = LocalizationManagerNew.source_LoadPack(LocalizationManagerNew.source_s_CurrentLocale);
+					LocalizationManagerNew.CurrentPack = LocalizationManagerNew.alias_LoadPack(LocalizationManagerNew.alias_s_CurrentLocale);
 					LocalizationManagerNew.LoadPacks();
 				}
 
-				if (locale != LocalizationManagerNew.source_s_CurrentLocale)
+				if (locale != LocalizationManagerNew.alias_s_CurrentLocale)
 				{
-					LocalizationManagerNew.source_OnLocaleChanged();
+					LocalizationManagerNew.alias_OnLocaleChanged();
 				}
 			}
 		}
 
 		[ModifiesMember("LoadPack", ModificationScope.Nothing)]
-		private static LocalizationPack source_LoadPack(Locale locale)
+		private static LocalizationPack alias_LoadPack(Locale locale)
 		{
 			throw new DeadEndException("source_LoadPack");
 		}
 
 		[ModifiesMember("OnLocaleChanged", ModificationScope.Nothing)]
-		private static void source_OnLocaleChanged()
+		private static void alias_OnLocaleChanged()
 		{
 			throw new DeadEndException("source_OnLocaleChanged");
 		}

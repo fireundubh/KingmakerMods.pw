@@ -5,7 +5,6 @@ using Kingmaker.Kingdom;
 using Kingmaker.Kingdom.Tasks;
 using Kingmaker.PubSubSystem;
 using KingmakerMods.Helpers;
-using KingmakerMods.UserConfig;
 using Patchwork;
 
 namespace KingmakerMods.Mods.Game.Configurables.CurrencyFallback
@@ -13,26 +12,9 @@ namespace KingmakerMods.Mods.Game.Configurables.CurrencyFallback
 	[ModifiesType]
 	public abstract class KingdomTaskNew : KingdomTask
 	{
-		[NewMember]
-		private static bool _cfgInit;
-
-		[NewMember]
-		private static bool _useMod;
-
-		[NewMember]
-		private static bool IsModReady()
-		{
-			if (!_cfgInit)
-			{
-				_cfgInit = true;
-				_useMod = Parser.GetValueAsBool("Game.KingdomEvents", "bCurrencyFallback");
-			}
-
-			return _useMod;
-		}
-
+		#region ALIASES
 		[ModifiesMember("StartedOn", ModificationScope.Nothing)]
-		public int source_StartedOn
+		public int alias_StartedOn
 		{
 			[ModifiesMember("get_StartedOn", ModificationScope.Nothing)]
 			get;
@@ -41,7 +23,7 @@ namespace KingmakerMods.Mods.Game.Configurables.CurrencyFallback
 		}
 
 		[ModifiesMember("IsStarted", ModificationScope.Nothing)]
-		public bool source_IsStarted
+		public bool alias_IsStarted
 		{
 			[ModifiesMember("get_IsStarted", ModificationScope.Nothing)]
 			get;
@@ -50,52 +32,55 @@ namespace KingmakerMods.Mods.Game.Configurables.CurrencyFallback
 		}
 
 		[ModifiesMember("OnTaskChanged", ModificationScope.Nothing)]
-		private void source_OnTaskChanged()
+		private void alias_OnTaskChanged()
 		{
 			throw new DeadEndException("source_OnTaskChanged");
 		}
+		#endregion
 
+		#region DUPLICATES
 		[NewMember]
 		[DuplicatesBody("Start")]
 		public virtual void source_Start(bool raiseEvent = true)
 		{
 			throw new DeadEndException("source_Start");
 		}
+		#endregion
 
 		[ModifiesMember("Start")]
 		public virtual void mod_Start(bool raiseEvent = true)
 		{
-			_useMod = IsModReady();
-
-			if (!_useMod)
+			if (!KingmakerPatchSettings.CurrencyFallback.Enabled)
 			{
 				this.source_Start(raiseEvent);
 				return;
 			}
 
-			this.source_IsStarted = true;
-			this.source_StartedOn = KingdomState.Instance.CurrentDay;
+			this.alias_IsStarted = true;
+			this.alias_StartedOn = KingdomState.Instance.CurrentDay;
 
 			KingdomCurrencyFallback.SpendPoints(this.OneTimeBPCost);
 
 			if (raiseEvent)
 			{
-				this.source_OnTaskChanged();
+				this.alias_OnTaskChanged();
 			}
 
 			EventBus.RaiseEvent((IKingdomTaskEventsHandler h) => h.OnTaskStarted(this));
 
-			if (this.SkipPlayerTime > 0)
+			if (this.SkipPlayerTime <= 0)
 			{
-				Kingmaker.Game.Instance.AdvanceGameTime(TimeSpan.FromDays(this.SkipPlayerTime));
-
-				foreach (UnitEntityData unitEntityData in Kingmaker.Game.Instance.Player.AllCharacters)
-				{
-					RestController.ApplyRest(unitEntityData.Descriptor);
-				}
-
-				new KingdomTimelineManager().UpdateTimeline();
+				return;
 			}
+
+			Kingmaker.Game.Instance.AdvanceGameTime(TimeSpan.FromDays(this.SkipPlayerTime));
+
+			foreach (UnitEntityData unitEntityData in Kingmaker.Game.Instance.Player.AllCharacters)
+			{
+				RestController.ApplyRest(unitEntityData.Descriptor);
+			}
+
+			new KingdomTimelineManager().UpdateTimeline();
 		}
 	}
 }

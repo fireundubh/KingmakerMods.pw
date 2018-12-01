@@ -13,29 +13,19 @@ namespace KingmakerMods.Mods.Game.Toggles.RestAnywhere
 	[ModifiesType]
 	public class RestCampControllerNew : RestCampController
 	{
-		[NewMember]
-		private static bool _cfgInit;
-
-		[NewMember]
-		private static bool _useMod;
-
+		#region DUPLICATES
 		[NewMember]
 		[DuplicatesBody("ShowRestUI")]
 		public static void source_ShowRestUI()
 		{
 			throw new DeadEndException("source_ShowRestUI");
 		}
+		#endregion
 
 		[ModifiesMember("ShowRestUI")]
 		public static void mod_ShowRestUI()
 		{
-			if (!_cfgInit)
-			{
-				_cfgInit = true;
-				_useMod = UserConfig.Parser.GetValueAsBool("Game", "bRestAnywhere");
-			}
-
-			if (!_useMod)
+			if (!KingmakerPatchSettings.Game.RestAnywhere)
 			{
 				source_ShowRestUI();
 				return;
@@ -57,7 +47,7 @@ namespace KingmakerMods.Mods.Game.Toggles.RestAnywhere
 //				return;
 //			}
 
-			OverrideCampingAction component = currentlyLoadedArea.GetComponent<OverrideCampingAction>();
+			var component = currentlyLoadedArea.GetComponent<OverrideCampingAction>();
 
 			if (component)
 			{

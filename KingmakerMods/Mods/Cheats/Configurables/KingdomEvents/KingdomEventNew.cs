@@ -13,22 +13,28 @@ namespace KingmakerMods.Mods.Cheats.Configurables.KingdomEvents
 	[ModifiesType]
 	public class KingdomEventNew : KingdomEvent
 	{
+		#region DUPLICATES
 		[NewMember]
-		private static bool _cfgInit;
-
-		[NewMember]
-		private static bool _useAlignmentOverride;
-
-		[NewMember]
-		private static bool _useMarginOverride;
-
-		[NewMember]
-		private static string _alignmentString;
-
-		[NewMember]
-		private static AlignmentMaskType new_GetAlignment(AlignmentMaskType alignment)
+		[DuplicatesBody("ForceFinalResolve")]
+		public void source_ForceFinalResolve(EventResult.MarginType margin, AlignmentMaskType? overrideAlignment = null)
 		{
-			switch (_alignmentString)
+			throw new DeadEndException("source_ForceFinalResolve");
+		}
+
+		[NewMember]
+		[DuplicatesBody("Resolve")]
+		private void source_Resolve(int checkMargin, AlignmentMaskType alignment, LeaderType type)
+		{
+			throw new DeadEndException("source_Resolve");
+		}
+		#endregion
+
+		[NewMember]
+		private static AlignmentMaskType? new_GetAlignment(string alignmentString)
+		{
+			AlignmentMaskType alignment;
+
+			switch (alignmentString)
 			{
 				case "lawfulgood":
 					alignment = AlignmentMaskType.LawfulGood;
@@ -57,6 +63,8 @@ namespace KingmakerMods.Mods.Cheats.Configurables.KingdomEvents
 				case "chaoticevil":
 					alignment = AlignmentMaskType.ChaoticEvil;
 					break;
+				default:
+					return null;
 			}
 
 			return alignment;
@@ -67,7 +75,7 @@ namespace KingmakerMods.Mods.Cheats.Configurables.KingdomEvents
 		{
 			KingdomTaskEvent associatedTask = this.AssociatedTask;
 
-			LeaderType leaderType = LeaderType.None;
+			var leaderType = LeaderType.None;
 
 			if (associatedTask != null)
 			{
@@ -90,9 +98,7 @@ namespace KingmakerMods.Mods.Cheats.Configurables.KingdomEvents
 				return autoResolveType;
 			}
 
-			EventResult[] possibleResults = this.EventBlueprint.Solutions.GetResolutions(leaderType).
-			                                     Where(r => !string.IsNullOrEmpty(r.LocalizedDescription)).
-			                                     ToArray();
+			EventResult[] possibleResults = this.EventBlueprint.Solutions.GetResolutions(leaderType).Where(r => !string.IsNullOrEmpty(r.LocalizedDescription)).ToArray();
 
 			if (possibleResults.Any(r => r.Margin == EventResult.MarginType.GreatSuccess))
 			{
@@ -107,36 +113,22 @@ namespace KingmakerMods.Mods.Cheats.Configurables.KingdomEvents
 			return autoResolveType;
 		}
 
-		[NewMember]
-		[DuplicatesBody("ForceFinalResolve")]
-		public void source_ForceFinalResolve(EventResult.MarginType margin, AlignmentMaskType? overrideAlignment = null)
-		{
-			throw new DeadEndException("source_ForceFinalResolve");
-		}
-
 		[ModifiesMember("ForceFinalResolve")]
 		public void mod_ForceFinalResolve(EventResult.MarginType margin, AlignmentMaskType? overrideAlignment = null)
 		{
-			if (!_cfgInit)
-			{
-				_cfgInit = true;
-				_useAlignmentOverride = UserConfig.Parser.GetValueAsBool("Cheats.KingdomAlignment", "bEnabled");
-				_useMarginOverride = UserConfig.Parser.GetValueAsBool("Cheats.KingdomEvents", "bMaximumEffort");
-			}
-
-			if (!_useAlignmentOverride && !_useMarginOverride)
+			if (!KingmakerPatchSettings.KingdomAlignment.Enabled && !KingmakerPatchSettings.KingdomEvents.MaximumEffort)
 			{
 				this.source_ForceFinalResolve(margin, overrideAlignment);
 				return;
 			}
 
-			if (_useAlignmentOverride)
+			if (KingmakerPatchSettings.KingdomAlignment.Enabled)
 			{
-				_alignmentString = UserConfig.Parser.GetValueAsString("Cheats.KingdomAlignment", "sAlignment").ToLowerInvariant();
-				overrideAlignment = new_GetAlignment(overrideAlignment ?? KingdomState.Instance.Alignment.ToMask());
+				string alignmentString = KingmakerPatchSettings.KingdomAlignment.Alignment.ToLowerInvariant();
+				overrideAlignment = new_GetAlignment(alignmentString) ?? KingdomState.Instance.Alignment.ToMask();
 			}
 
-			if (!_useMarginOverride)
+			if (!KingmakerPatchSettings.KingdomEvents.MaximumEffort)
 			{
 				this.source_ForceFinalResolve(margin, overrideAlignment);
 				return;
@@ -153,36 +145,22 @@ namespace KingmakerMods.Mods.Cheats.Configurables.KingdomEvents
 			this.source_ForceFinalResolve(margin, overrideAlignment);
 		}
 
-		[NewMember]
-		[DuplicatesBody("Resolve")]
-		private void source_Resolve(int checkMargin, AlignmentMaskType alignment, LeaderType type)
-		{
-			throw new DeadEndException("source_Resolve");
-		}
-
 		[ModifiesMember("Resolve")]
 		private void mod_Resolve(int checkMargin, AlignmentMaskType alignment, LeaderType type)
 		{
-			if (!_cfgInit)
-			{
-				_cfgInit = true;
-				_useAlignmentOverride = UserConfig.Parser.GetValueAsBool("Cheats.KingdomAlignment", "bEnabled");
-				_useMarginOverride = UserConfig.Parser.GetValueAsBool("Cheats.KingdomEvents", "bMaximumEffort");
-			}
-
-			if (!_useAlignmentOverride && !_useMarginOverride)
+			if (!KingmakerPatchSettings.KingdomAlignment.Enabled && !KingmakerPatchSettings.KingdomEvents.MaximumEffort)
 			{
 				this.source_Resolve(checkMargin, alignment, type);
 				return;
 			}
 
-			if (_useAlignmentOverride)
+			if (KingmakerPatchSettings.KingdomAlignment.Enabled)
 			{
-				_alignmentString = UserConfig.Parser.GetValueAsString("Cheats.KingdomAlignment", "sAlignment").ToLowerInvariant();
-				alignment = new_GetAlignment(alignment);
+				string alignmentString = KingmakerPatchSettings.KingdomAlignment.Alignment.ToLowerInvariant();
+				alignment = new_GetAlignment(alignmentString) ?? alignment;
 			}
 
-			if (!_useMarginOverride)
+			if (!KingmakerPatchSettings.KingdomEvents.MaximumEffort)
 			{
 				this.source_Resolve(checkMargin, alignment, type);
 				return;

@@ -15,22 +15,18 @@ namespace KingmakerMods.Mods.Fixes
 		{
 			int childCount = this.transform.childCount;
 
-			for (int i = 0; i < childCount; i++)
+			for (var i = 0; i < childCount; i++)
 			{
 				Transform child = this.transform.GetChild(i);
 
 				// RectTransform rectTransform = child as RectTransform;
 
 				child.SetParent(this.transform);
-				RectTransform rectTransform = child.GetComponent<RectTransform>();
+				var rectTransform = child.GetComponent<RectTransform>();
 
 				if (rectTransform != null)
 				{
 					Vector2 anchoredPosition = rectTransform.anchoredPosition;
-				}
-				else
-				{
-					UberDebug.LogWarning("Can not cast {0} to RectTransform", new object[] {this.transform.name});
 				}
 			}
 		}

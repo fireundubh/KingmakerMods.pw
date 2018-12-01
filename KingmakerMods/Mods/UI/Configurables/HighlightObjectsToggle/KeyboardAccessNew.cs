@@ -1,52 +1,39 @@
-﻿using Kingmaker.UI;
+﻿using System.Collections.Generic;
+using Kingmaker.GameModes;
+using Kingmaker.UI;
 using KingmakerMods.Helpers;
 using Patchwork;
+using UnityEngine;
 
 namespace KingmakerMods.Mods.UI.Configurables.HighlightObjectsToggle
 {
 	[ModifiesType]
 	public class KeyboardAccessNew : KeyboardAccess
 	{
-		#region CONFIGURATION
-		[NewMember]
-		private static bool _cfgInit;
-
-		[NewMember]
-		private static bool _useMod;
-
-		[NewMember]
-		private static bool IsModReady()
+		[ModifiesMember("RegisterBinding", ModificationScope.Nothing)]
+		public void mod_RegisterBinding(string name, KeyCode key, IEnumerable<GameModeType> gameModes)
 		{
-			if (!_cfgInit)
+			throw new DeadEndException("mod_RegisterBinding");
+		}
+
+		[ModifiesMember("RegisterBinding")]
+		public void mod_RegisterBinding(string name, KeyCode key, IEnumerable<GameModeType> gameModes, bool ctrl, bool alt, bool shift, bool release = false, ModificationSide side = ModificationSide.Any)
+		{
+			if (KingmakerPatchSettings.HighlightObjects.Enabled && name == "HighlightObjectsOff")
 			{
-				_cfgInit = true;
-				_useMod = UserConfig.Parser.GetValueAsBool("UI.HighlightObjectsToggle", "bEnabled");
+				return;
 			}
 
-			return _useMod;
-		}
-		#endregion
-
-		#region DUPLICATED METHODS
-		[NewMember]
-		[DuplicatesBody("RegisterBuiltinBindings")]
-		public void source_RegisterBuiltinBindings()
-		{
-			throw new DeadEndException("source_RegisterBuiltinBindings");
-		}
-		#endregion
-
-		[ModifiesMember("RegisterBuiltinBindings")]
-		public void mod_RegisterBuiltinBindings()
-		{
-			this.source_RegisterBuiltinBindings();
-
-			_useMod = IsModReady();
-
-			if (_useMod)
+			foreach (GameModeType gameMode in gameModes)
 			{
-				this.UnregisterBinding("HighlightObjectsOff");
+				this.mod_RegisterBinding(name, key, gameMode, ctrl, alt, shift, release, side);
 			}
+		}
+
+		[ModifiesMember("RegisterBinding", ModificationScope.Nothing)]
+		private void mod_RegisterBinding(string name, KeyCode key, GameModeType gameMode, bool ctrl, bool alt, bool shift, bool release, KeyboardAccess.ModificationSide side)
+		{
+			throw new DeadEndException("mod_RegisterBinding");
 		}
 	}
 }

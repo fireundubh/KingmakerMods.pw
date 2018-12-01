@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Kingmaker.Blueprints;
-using Kingmaker.Designers.EventConditionActionSystem.Actions;
+﻿using Kingmaker.Blueprints;
 using KingmakerMods.Helpers;
 using Patchwork;
 
@@ -10,32 +7,23 @@ namespace KingmakerMods.Mods.Game.Toggles.PremiumRewards
 	[ModifiesType]
 	public class BlueprintPortraitNew : BlueprintPortrait
 	{
-		[NewMember]
-		private static bool _cfgInit;
-
-		[NewMember]
-		private static bool _useMod;
-
+		#region DUPLICATES
 		[NewMember]
 		[DuplicatesBody("get_PlayerHasAccess")]
 		public bool source_get_PlayerHasAccess()
 		{
 			throw new DeadEndException("source_get_PlayerHasAccess");
 		}
+		#endregion
 
 		[ModifiesMember("PlayerHasAccess")]
-		public bool PlayerHasAccessNew
+		public bool mod_PlayerHasAccess
 		{
 			[ModifiesMember("get_PlayerHasAccess")]
 			get
 			{
-				if (!_cfgInit)
-				{
-					_cfgInit = true;
-					_useMod = UserConfig.Parser.GetValueAsBool("Game", "bUnlockPremiumPortraits");
-				}
-
-				if (_useMod)
+				// ReSharper disable once ConvertIfStatementToReturnStatement
+				if (KingmakerPatchSettings.Game.UnlockPremiumPortraits)
 				{
 					return true;
 				}

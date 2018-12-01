@@ -12,33 +12,30 @@ namespace KingmakerMods.Mods.Game.Configurables.CurrencyFallback
 	[ModifiesType]
 	public class SettlementStateNew : SettlementState
 	{
-		[NewMember]
-		private static bool _cfgInit;
-
-		[NewMember]
-		private static bool _useMod;
-
+		#region ALIASES
 		[ModifiesMember("m_SlotsLeft", ModificationScope.Nothing)]
-		private int source_m_SlotsLeft;
+		private int alias_m_SlotsLeft;
 
 		[ModifiesMember("m_Buildings", ModificationScope.Nothing)]
-		private readonly BuildingsCollection source_m_Buildings;
+		private readonly BuildingsCollection alias_m_Buildings;
 
 		[ModifiesMember("SellDiscountedBuilding", ModificationScope.Nothing)]
-		public BlueprintSettlementBuilding source_SellDiscountedBuilding { get; private set; }
-
-		[NewMember]
-		private static bool IsModReady()
+		public BlueprintSettlementBuilding alias_SellDiscountedBuilding
 		{
-			if (!_cfgInit)
-			{
-				_cfgInit = true;
-				_useMod = UserConfig.Parser.GetValueAsBool("Game.KingdomEvents", "bCurrencyFallback");
-			}
-
-			return _useMod;
+			[ModifiesMember("get_SellDiscountedBuilding", ModificationScope.Nothing)]
+			get;
+			[ModifiesMember("set_SellDiscountedBuilding", ModificationScope.Nothing)]
+			private set;
 		}
 
+		[ModifiesMember("CanBuildByLevel", ModificationScope.Nothing)]
+		private bool alias_CanBuildByLevel(BlueprintSettlementBuilding building)
+		{
+			throw new DeadEndException("source_CanBuildByLevel");
+		}
+		#endregion
+
+		#region DUPLICATES
 		[NewMember]
 		[DuplicatesBody("Build")]
 		public SettlementBuilding source_Build(BlueprintSettlementBuilding building, SettlementGridTopology.Slot slot, bool force = false)
@@ -51,12 +48,6 @@ namespace KingmakerMods.Mods.Game.Configurables.CurrencyFallback
 		public bool source_CanBuild(BlueprintSettlementBuilding building)
 		{
 			throw new DeadEndException("source_CanBuild");
-		}
-
-		[ModifiesMember("CanBuildByLevel", ModificationScope.Nothing)]
-		private bool source_CanBuildByLevel(BlueprintSettlementBuilding building)
-		{
-			throw new DeadEndException("source_CanBuildByLevel");
 		}
 
 		[NewMember]
@@ -72,18 +63,17 @@ namespace KingmakerMods.Mods.Game.Configurables.CurrencyFallback
 		{
 			throw new DeadEndException("source_UpgradeBuilding");
 		}
+		#endregion
 
 		[ModifiesMember("Build")]
 		public SettlementBuilding mod_Build(BlueprintSettlementBuilding building, SettlementGridTopology.Slot slot, bool force = false)
 		{
-			_useMod = IsModReady();
-
-			if (!_useMod)
+			if (!KingmakerPatchSettings.CurrencyFallback.Enabled)
 			{
 				return this.source_Build(building, slot, force);
 			}
 
-			bool removedBuilding = true;
+			var removedBuilding = true;
 
 			if (!force)
 			{
@@ -104,17 +94,17 @@ namespace KingmakerMods.Mods.Game.Configurables.CurrencyFallback
 				removedBuilding = this.FreeBuildings.Remove(building) || KingdomState.Instance.FreeBuildings.Remove(building);
 			}
 
-			SettlementBuilding settlementBuilding = this.source_m_Buildings.Build(building);
+			SettlementBuilding settlementBuilding = this.alias_m_Buildings.Build(building);
 			settlementBuilding.BuildOnSlot(slot);
 
 			if (building.SpecialSlot == SpecialSlotType.None)
 			{
-				this.source_m_SlotsLeft -= building.SlotCount;
+				this.alias_m_SlotsLeft -= building.SlotCount;
 			}
 
-			if (!force && !removedBuilding || this.source_SellDiscountedBuilding != building)
+			if (!force && !removedBuilding || this.alias_SellDiscountedBuilding != building)
 			{
-				this.source_SellDiscountedBuilding = null;
+				this.alias_SellDiscountedBuilding = null;
 			}
 
 			this.Update();
@@ -127,9 +117,7 @@ namespace KingmakerMods.Mods.Game.Configurables.CurrencyFallback
 		[ModifiesMember("CanBuild")]
 		public bool mod_CanBuild(BlueprintSettlementBuilding building)
 		{
-			_useMod = IsModReady();
-
-			if (!_useMod)
+			if (!KingmakerPatchSettings.CurrencyFallback.Enabled)
 			{
 				return this.source_CanBuild(building);
 			}
@@ -149,20 +137,18 @@ namespace KingmakerMods.Mods.Game.Configurables.CurrencyFallback
 					return false;
 				}
 			}
-			else if (this.source_m_SlotsLeft < building.SlotCount)
+			else if (this.alias_m_SlotsLeft < building.SlotCount)
 			{
 				return false;
 			}
 
-			return this.source_CanBuildByLevel(building);
+			return this.alias_CanBuildByLevel(building);
 		}
 
 		[ModifiesMember("CanBuildUprgade")]
 		public bool mod_CanBuildUprgade(BlueprintSettlementBuilding building)
 		{
-			_useMod = IsModReady();
-
-			if (!_useMod)
+			if (!KingmakerPatchSettings.CurrencyFallback.Enabled)
 			{
 				return this.source_CanBuildUprgade(building);
 			}
@@ -173,14 +159,12 @@ namespace KingmakerMods.Mods.Game.Configurables.CurrencyFallback
 		[ModifiesMember("UpgradeBuilding")]
 		public SettlementBuilding mod_UpgradeBuilding(SettlementBuilding building)
 		{
-			_useMod = IsModReady();
-
-			if (!_useMod)
+			if (!KingmakerPatchSettings.CurrencyFallback.Enabled)
 			{
 				return this.source_UpgradeBuilding(building);
 			}
 
-			if (!building.IsFinished || !this.source_m_Buildings.HasFact(building) || !building.Blueprint.UpgradesTo)
+			if (!building.IsFinished || !this.alias_m_Buildings.HasFact(building) || !building.Blueprint.UpgradesTo)
 			{
 				return null;
 			}
@@ -193,7 +177,7 @@ namespace KingmakerMods.Mods.Game.Configurables.CurrencyFallback
 
 			KingdomCurrencyFallback.SpendPoints(this.GetActualCost(building.Blueprint));
 
-			SettlementBuilding result = this.source_m_Buildings.Upgrade(building);
+			SettlementBuilding result = this.alias_m_Buildings.Upgrade(building);
 
 			this.Update();
 

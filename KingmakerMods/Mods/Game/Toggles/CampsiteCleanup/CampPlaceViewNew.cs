@@ -7,29 +7,19 @@ namespace KingmakerMods.Mods.Game.Toggles.CampsiteCleanup
 	[ModifiesType]
 	public class CampPlaceViewNew : CampPlaceView
 	{
-		[NewMember]
-		private static bool _cfgInit;
-
-		[NewMember]
-		private static bool _useMod;
-
+		#region DUPLICATES
 		[NewMember]
 		[DuplicatesBody("ReplaceWithInactiveCamp")]
 		public MapObjectView source_ReplaceWithInactiveCamp()
 		{
 			throw new DeadEndException("source_ReplaceWithInactiveCamp");
 		}
+		#endregion
 
 		[ModifiesMember("ReplaceWithInactiveCamp")]
 		public MapObjectView mod_ReplaceWithInactiveCamp()
 		{
-			if (!_cfgInit)
-			{
-				_cfgInit = true;
-				_useMod = UserConfig.Parser.GetValueAsBool("Game", "bCampsiteCleanup");
-			}
-
-			if (!_useMod)
+			if (!KingmakerPatchSettings.Game.CampsiteCleanup)
 			{
 				return this.source_ReplaceWithInactiveCamp();
 			}

@@ -8,45 +8,35 @@ using Kingmaker.UI.Kingdom;
 using KingmakerMods.Helpers;
 using Patchwork;
 
-#pragma warning disable 169, 649
-
 namespace KingmakerMods.Mods.Cheats.Toggles.KingdomEvents
 {
 	[ModifiesType]
 	public class KingdomUIEventWindowFooterNew : KingdomUIEventWindowFooter
 	{
-		[NewMember]
-		private static bool _cfgInit;
-
-		[NewMember]
-		private static bool _useMod;
-
+		#region ALIASES
 		[ModifiesMember("m_KingdomEventView", ModificationScope.Nothing)]
-		private KingdomEventUIView mod_m_KingdomEventView;
+		private KingdomEventUIView alias_m_KingdomEventView;
+		#endregion
 
+		#region DUPLICATES
 		[NewMember]
 		[DuplicatesBody("OnStart")]
 		public void source_OnStart()
 		{
 			throw new DeadEndException("source_OnStart");
 		}
+		#endregion
 
 		[ModifiesMember("OnStart")]
 		public void mod_OnStart()
 		{
-			if (!_cfgInit)
-			{
-				_cfgInit = true;
-				_useMod = UserConfig.Parser.GetValueAsBool("Cheats.KingdomEvents", "bInstantComplete");
-			}
-
-			if (!_useMod)
+			if (!KingmakerPatchSettings.KingdomEvents.InstantComplete)
 			{
 				this.source_OnStart();
 				return;
 			}
 
-			KingdomEventUIView previousView = this.mod_m_KingdomEventView;
+			KingdomEventUIView previousView = this.alias_m_KingdomEventView;
 
 			EventBus.RaiseEvent((IKingdomUIStartSpendTimeEvent h) => h.OnStartSpendTimeEvent(previousView.Blueprint));
 
@@ -54,14 +44,9 @@ namespace KingmakerMods.Mods.Cheats.Toggles.KingdomEvents
 
 			EventBus.RaiseEvent((IKingdomUICloseEventWindow h) => h.OnClose());
 
-			if (task == null)
-			{
-				return;
-			}
+			task?.Start(false);
 
-			task.Start(false);
-
-			if (task.IsFinished || task.AssignedLeader == null || previousView.Blueprint.NeedToVisitTheThroneRoom)
+			if (task == null || task.IsFinished || task.AssignedLeader == null || previousView.Blueprint.NeedToVisitTheThroneRoom)
 			{
 				return;
 			}

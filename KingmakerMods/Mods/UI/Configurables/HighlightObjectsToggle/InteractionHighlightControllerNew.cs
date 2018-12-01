@@ -11,31 +11,18 @@ namespace KingmakerMods.Mods.UI.Configurables.HighlightObjectsToggle
 	[ModifiesType]
 	public class InteractionHighlightControllerNew : InteractionHighlightController
 	{
-		#region CONFIGURATION
-		[NewMember]
-		private static bool _cfgInit;
+		#region ALIASES
 
-		[NewMember]
-		private static bool _useMod;
+		[ModifiesMember("m_IsHighlighting", ModificationScope.Nothing)]
+		private bool alias_m_IsHighlighting;
 
-		[NewMember]
-		private static int _secondsBetweenTicksGameTime;
+		[ModifiesMember("m_Inactive", ModificationScope.Nothing)]
+		private bool alias_m_Inactive;
 
-		[NewMember]
-		private static bool IsModReady()
-		{
-			if (!_cfgInit)
-			{
-				_cfgInit = true;
-				_useMod = UserConfig.Parser.GetValueAsBool("UI.HighlightObjectsToggle", "bEnabled");
-				_secondsBetweenTicksGameTime = UserConfig.Parser.GetValueAsInt("UI.HighlightObjectsToggle", "iSecondsBetweenTicksGameTime");
-			}
-
-			return _useMod;
-		}
 		#endregion
 
-		#region DUPLICATED METHODS
+		#region DUPLICATES
+
 		[NewMember]
 		[DuplicatesBody("Activate")]
 		public void source_Activate()
@@ -49,74 +36,29 @@ namespace KingmakerMods.Mods.UI.Configurables.HighlightObjectsToggle
 		{
 			throw new DeadEndException("");
 		}
+
 		#endregion
-
-		[ModifiesMember("m_IsHighlighting", ModificationScope.Nothing)]
-		private bool source_m_IsHighlighting;
-
-		[ModifiesMember("m_Inactive", ModificationScope.Nothing)]
-		private bool source_m_Inactive;
 
 		[NewMember]
 		private TimeSpan m_LastTickTime;
 
-		[ModifiesMember("Activate")]
-		public void mod_Activate()
+		[NewMember]
+		private void ToggleHighlight()
 		{
-			_useMod = IsModReady();
-
-			if (!_useMod)
-			{
-				this.source_Activate();
-				return;
-			}
-
-			Kingmaker.Game.Instance.Keyboard.Bind("HighlightObjectsOn", this.ToggleHighlight);
-
-			this.source_m_Inactive = false;
-		}
-
-		[ModifiesMember("Deactivate")]
-		public void mod_Deactivate()
-		{
-			_useMod = IsModReady();
-
-			if (!_useMod)
-			{
-				this.source_Deactivate();
-				return;
-			}
-
-			Kingmaker.Game.Instance.Keyboard.Unbind("HighlightObjectsOn", this.ToggleHighlight);
-
-			if (this.source_m_IsHighlighting)
-			{
-				this.ToggleHighlight();
-			}
-
-			this.source_m_Inactive = true;
-		}
-
-		[ModifiesMember("Tick")]
-		public void mod_Tick()
-		{
-			if (!_useMod || this.source_m_Inactive || !this.source_m_IsHighlighting)
+			if (this.alias_m_Inactive)
 			{
 				return;
 			}
 
-			if (Kingmaker.Game.Instance.TimeController.GameTime - this.m_LastTickTime < _secondsBetweenTicksGameTime.Seconds())
-			{
-				return;
-			}
+			this.alias_m_IsHighlighting = !this.alias_m_IsHighlighting;
 
-			this.m_LastTickTime = Kingmaker.Game.Instance.TimeController.GameTime;
+			UpdateHighlights();
 
-			this.UpdateHighlights(true);
+			EventBus.RaiseEvent((IInteractionHighlightUIHandler h) => h.HandleHighlightChange(this.alias_m_IsHighlighting));
 		}
 
 		[NewMember]
-		private void UpdateHighlights(bool raiseEvent = false)
+		private static void UpdateHighlights(bool raiseEvent = false)
 		{
 			foreach (MapObjectEntityData mapObjectEntityData in Kingmaker.Game.Instance.State.MapObjects)
 			{
@@ -129,21 +71,55 @@ namespace KingmakerMods.Mods.UI.Configurables.HighlightObjectsToggle
 			}
 		}
 
-		[NewMember]
-		private void ToggleHighlight()
+		[ModifiesMember("Activate")]
+		public void mod_Activate()
 		{
-			_useMod = IsModReady();
+			if (!KingmakerPatchSettings.HighlightObjects.Enabled)
+			{
+				this.source_Activate();
+				return;
+			}
 
-			if (this.source_m_Inactive)
+			Kingmaker.Game.Instance.Keyboard.Bind("HighlightObjectsOn", this.ToggleHighlight);
+
+			this.alias_m_Inactive = false;
+		}
+
+		[ModifiesMember("Deactivate")]
+		public void mod_Deactivate()
+		{
+			if (!KingmakerPatchSettings.HighlightObjects.Enabled)
+			{
+				this.source_Deactivate();
+				return;
+			}
+
+			Kingmaker.Game.Instance.Keyboard.Unbind("HighlightObjectsOn", this.ToggleHighlight);
+
+			if (this.alias_m_IsHighlighting)
+			{
+				this.ToggleHighlight();
+			}
+
+			this.alias_m_Inactive = true;
+		}
+
+		[ModifiesMember("Tick")]
+		public void mod_Tick()
+		{
+			if (!KingmakerPatchSettings.HighlightObjects.Enabled || this.alias_m_Inactive || !this.alias_m_IsHighlighting)
 			{
 				return;
 			}
 
-			this.source_m_IsHighlighting = !this.source_m_IsHighlighting;
+			if (Kingmaker.Game.Instance.TimeController.GameTime - this.m_LastTickTime < KingmakerPatchSettings.HighlightObjects.SecondsBetweenTicksGameTime.Seconds())
+			{
+				return;
+			}
 
-			this.UpdateHighlights();
+			this.m_LastTickTime = Kingmaker.Game.Instance.TimeController.GameTime;
 
-			EventBus.RaiseEvent((IInteractionHighlightUIHandler h) => h.HandleHighlightChange(this.source_m_IsHighlighting));
+			UpdateHighlights(true);
 		}
 	}
 }

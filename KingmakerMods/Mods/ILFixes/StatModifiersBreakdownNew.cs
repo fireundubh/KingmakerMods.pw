@@ -23,7 +23,9 @@ namespace KingmakerMods.Mods.ILFixes
 				}
 
 				ModifierDescriptor descriptor = displayModifier.ModDescriptor == ModifierDescriptor.None ? ModifierDescriptor.Other : displayModifier.ModDescriptor;
-				IUIDataProvider bonusSource = (IUIDataProvider) (displayModifier.Source ?? (object) displayModifier.ItemSource);
+
+				var bonusSource = (IUIDataProvider) (displayModifier.Source ?? (object) displayModifier.ItemSource);
+
 				StatModifiersBreakdown.AddBonus(displayModifier.ModValue, bonusSource, descriptor);
 			}
 		}
@@ -41,7 +43,9 @@ namespace KingmakerMods.Mods.ILFixes
 				}
 
 				ModifierDescriptor descriptor = displayModifier.ModDescriptor == ModifierDescriptor.None ? ModifierDescriptor.Other : displayModifier.ModDescriptor;
-				IUIDataProvider bonusSource = (IUIDataProvider) (displayModifier.Source ?? (object) displayModifier.ItemSource);
+
+				var bonusSource = (IUIDataProvider) (displayModifier.Source ?? (object) displayModifier.ItemSource);
+
 				StatModifiersBreakdown.AddBonus(displayModifier.ModValue, bonusSource, descriptor);
 			}
 		}

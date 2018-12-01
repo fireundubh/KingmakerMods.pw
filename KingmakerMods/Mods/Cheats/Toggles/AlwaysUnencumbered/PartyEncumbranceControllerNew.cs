@@ -10,12 +10,7 @@ namespace KingmakerMods.Mods.Cheats.Toggles.AlwaysUnencumbered
 	[ModifiesType]
 	public class PartyEncumbranceControllerNew : PartyEncumbranceController
 	{
-		[NewMember]
-		private static bool _cfgInit;
-
-		[NewMember]
-		private static bool _useMod;
-
+		#region DUPLICATES
 		[NewMember]
 		[DuplicatesBody("UpdatePartyEncumbrance")]
 		public static void source_UpdatePartyEncumbrance()
@@ -29,17 +24,12 @@ namespace KingmakerMods.Mods.Cheats.Toggles.AlwaysUnencumbered
 		{
 			throw new DeadEndException("source_UpdateUnitEncumbrance");
 		}
+		#endregion
 
 		[ModifiesMember("UpdatePartyEncumbrance")]
 		public static void mod_UpdatePartyEncumbrance()
 		{
-			if (!_cfgInit)
-			{
-				_cfgInit = true;
-				_useMod = UserConfig.Parser.GetValueAsBool("Cheats", "bAlwaysUnencumbered");
-			}
-
-			if (!_useMod)
+			if (!KingmakerPatchSettings.Cheats.AlwaysUnencumbered)
 			{
 				source_UpdatePartyEncumbrance();
 				return;
@@ -58,38 +48,21 @@ namespace KingmakerMods.Mods.Cheats.Toggles.AlwaysUnencumbered
 		[ModifiesMember("UpdateUnitEncumbrance")]
 		public static void mod_UpdateUnitEncumbrance(UnitDescriptor unit)
 		{
-			if (!_cfgInit)
-			{
-				_cfgInit = true;
-				_useMod = UserConfig.Parser.GetValueAsBool("Cheats", "bAlwaysUnencumbered");
-			}
-
-			if (!_useMod)
+			if (!KingmakerPatchSettings.Cheats.AlwaysUnencumbered)
 			{
 				source_UpdateUnitEncumbrance(unit);
 				return;
 			}
 
-			const Encumbrance encumbrance = Encumbrance.Light;
-
-			if (unit.Encumbrance == encumbrance)
+			if (unit.Encumbrance == Encumbrance.Light)
 			{
 				return;
 			}
 
-			unit.Encumbrance = encumbrance;
-
-			if (unit.Encumbrance == Encumbrance.Light)
-			{
-				unit.Remove<UnitPartEncumbrance>();
-			}
-			else
-			{
-				unit.Ensure<UnitPartEncumbrance>().Init(unit.Encumbrance);
-			}
+			unit.Encumbrance = Encumbrance.Light;
+			unit.Remove<UnitPartEncumbrance>();
 
 			EventBus.RaiseEvent<IUnitEncumbranceHandler>(x => x.ChangeUnitEncumbrance(unit));
-
 			EventBus.RaiseEvent<IUIUnitStatsRefresh>(h => h.Refresh());
 		}
 	}

@@ -7,34 +7,24 @@ namespace KingmakerMods.Mods.Cheats.Toggles.AlwaysUnencumbered
 	[ModifiesType("Kingmaker.UnitLogic.EncumbranceHelper")]
 	public static class EncumbranceHelperNew
 	{
-		[NewMember]
-		private static bool _cfgInit;
-
-		[NewMember]
-		private static bool _useMod;
-
+		#region DUPLICATES
 		[NewMember]
 		[DuplicatesBody("GetEncumbrance")]
 		public static Encumbrance source_GetEncumbrance(UnitDescriptor unit)
 		{
 			throw new DeadEndException("source_GetEncumbrance");
 		}
+		#endregion
 
 		[ModifiesMember("GetEncumbrance")]
 		public static Encumbrance mod_GetEncumbrance(UnitDescriptor unit)
 		{
-			if (!_cfgInit)
+			if (!KingmakerPatchSettings.Cheats.AlwaysUnencumbered)
 			{
-				_cfgInit = true;
-				_useMod = UserConfig.Parser.GetValueAsBool("Cheats", "bAlwaysUnencumbered");
+				return source_GetEncumbrance(unit);
 			}
 
-			if (_useMod && unit.IsPlayerFaction)
-			{
-				return Encumbrance.Light;
-			}
-
-			return source_GetEncumbrance(unit);
+			return unit.IsPlayerFaction ? Encumbrance.Light : source_GetEncumbrance(unit);
 		}
 	}
 }

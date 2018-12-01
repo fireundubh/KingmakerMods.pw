@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "KingmakerMods.pw"
-#define MyAppVersion "1.0.16"
+#define MyAppVersion "1.0.17"
 #define MyAppPublisher "fireundubh"
 #define MyAppURL "https://www.nexusmods.com/pathfinderkingmaker/mods/32"
 #define MyAppExeName "PatchworkLauncher.exe"
@@ -66,6 +66,7 @@ Source: "E:\repos\KingmakerMods.pw Launcher\PatchworkLauncher\bin\Release\Serilo
 Source: "E:\repos\KingmakerMods.pw\KingmakerMods.ini"; DestDir: "{code:GamePathOrCustom}"; Flags: ignoreversion confirmoverwrite uninsneveruninstall
 Source: "E:\repos\KingmakerMods.pw Launcher\packages\ini-parser.2.5.2\lib\net20\INIFileParser.dll"; DestDir: "{code:GamePathOrCustom}\Kingmaker_Data\Managed"; Flags: ignoreversion
 Source: "E:\repos\KingmakerMods.pw Launcher\PatchworkLauncher\bin\Release\Patchwork.Attributes.dll"; DestDir: "{code:GamePathOrCustom}\Kingmaker_Data\Managed"; Flags: ignoreversion
+Source: "E:\repos\UserConfig\UserConfig\bin\Release\UserConfig.dll"; DestDir: "{code:GamePathOrCustom}\Kingmaker_Data\Managed"; Flags: ignoreversion
 Source: "E:\repos\KingmakerMods.pw\Kingmaker_Data\Mods\Localization\enGB\KingmakerMods.pw.json"; DestDir: "{code:GamePathOrCustom}\Kingmaker_Data\Mods\Localization\deDE"; Flags: ignoreversion
 Source: "E:\repos\KingmakerMods.pw\Kingmaker_Data\Mods\Localization\enGB\KingmakerMods.pw.json"; DestDir: "{code:GamePathOrCustom}\Kingmaker_Data\Mods\Localization\enGB"; Flags: ignoreversion
 Source: "E:\repos\KingmakerMods.pw\Kingmaker_Data\Mods\Localization\enGB\KingmakerMods.pw.json"; DestDir: "{code:GamePathOrCustom}\Kingmaker_Data\Mods\Localization\frFR"; Flags: ignoreversion

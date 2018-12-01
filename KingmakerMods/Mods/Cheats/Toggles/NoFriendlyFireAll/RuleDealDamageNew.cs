@@ -13,29 +13,19 @@ namespace KingmakerMods.Mods.Cheats.Toggles.NoFriendlyFireAll
 	[ModifiesType]
 	public class RuleDealDamageNew : RuleDealDamage
 	{
-		[NewMember]
-		private static bool _cfgInit;
-
-		[NewMember]
-		private static bool _useMod;
-
+		#region DUPLICATES
 		[NewMember]
 		[DuplicatesBody("ApplyDifficultyModifiers")]
 		private int source_ApplyDifficultyModifiers(int damage)
 		{
 			throw new DeadEndException("source_ApplyDifficultyModifiers");
 		}
+		#endregion
 
 		[ModifiesMember("ApplyDifficultyModifiers")]
 		private int mod_ApplyDifficultyModifiers(int damage)
 		{
-			if (!_cfgInit)
-			{
-				_cfgInit = true;
-				_useMod = UserConfig.Parser.GetValueAsBool("Cheats", "bNoFriendlyFire");
-			}
-
-			if (!_useMod)
+			if (!KingmakerPatchSettings.Cheats.NoFriendlyFire)
 			{
 				return this.source_ApplyDifficultyModifiers(damage);
 			}

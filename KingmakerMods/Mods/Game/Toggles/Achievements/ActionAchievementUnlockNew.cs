@@ -7,29 +7,19 @@ namespace KingmakerMods.Mods.Game.Toggles.Achievements
 	[ModifiesType]
 	public class ActionAchievementUnlockNew : ActionAchievementUnlock
 	{
-		[NewMember]
-		private static bool _cfgInit;
-
-		[NewMember]
-		private static bool _useMod;
-
+		#region DUPLICATES
 		[NewMember]
 		[DuplicatesBody("RunAction")]
 		public void source_RunAction()
 		{
 			throw new DeadEndException("source_RunAction");
 		}
+		#endregion
 
 		[ModifiesMember("RunAction")]
 		public void mod_RunAction()
 		{
-			if (!_cfgInit)
-			{
-				_cfgInit = true;
-				_useMod = UserConfig.Parser.GetValueAsBool("Game", "bDisableAchievements");
-			}
-
-			if (_useMod)
+			if (KingmakerPatchSettings.Game.DisableAchievements)
 			{
 				return;
 			}

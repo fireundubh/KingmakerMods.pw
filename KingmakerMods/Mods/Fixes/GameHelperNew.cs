@@ -13,7 +13,9 @@ namespace KingmakerMods.Mods.Fixes
 		// Occurred four times in a row when player sent kobolds to worg for dinner to steal their drugs
 
 		// Object reference not set to an instance of an object
-		//		at Kingmaker.Designers.GameHelper.ApplyBuff (Kingmaker.EntitySystem.Entities.UnitEntityData target, Kingmaker.UnitLogic.Buffs.Blueprints.BlueprintBuff buff, System.Nullable`1[T] duration) [0x0002f] in <ce7a2e7c39614ae6a8d3ccb1a6c99337>:0		//		at Kingmaker.Designers.EventConditionActionSystem.Actions.AttachBuff.RunAction () [0x00036] in <ce7a2e7c39614ae6a8d3ccb1a6c99337>:0		//		at Kingmaker.ElementsSystem.ActionList.Run () [0x00023] in <ce7a2e7c39614ae6a8d3ccb1a6c99337>:0
+		//		at Kingmaker.Designers.GameHelper.ApplyBuff (Kingmaker.EntitySystem.Entities.UnitEntityData target, Kingmaker.UnitLogic.Buffs.Blueprints.BlueprintBuff buff, System.Nullable`1[T] duration) [0x0002f] in <ce7a2e7c39614ae6a8d3ccb1a6c99337>:0
+		//		at Kingmaker.Designers.EventConditionActionSystem.Actions.AttachBuff.RunAction () [0x00036] in <ce7a2e7c39614ae6a8d3ccb1a6c99337>:0
+		//		at Kingmaker.ElementsSystem.ActionList.Run () [0x00023] in <ce7a2e7c39614ae6a8d3ccb1a6c99337>:0
 		//
 		// NullReferenceException in Attach Buff (FadeInOut) (asset $AttachBuff$3f4b810b-1777-4656-95d3-2aeca7459703)
 		//		Kingmaker.ElementsSystem.ActionList.Run() (at :0)
@@ -28,12 +30,14 @@ namespace KingmakerMods.Mods.Fixes
 		//		Kingmaker.Game.Tick() (at :0)
 		//		Kingmaker.Runner.Update() (at :0)
 
+		#region DUPLICATES
 		[NewMember]
 		[DuplicatesBody("ApplyBuff")]
 		public static Buff source_ApplyBuff(UnitEntityData target, BlueprintBuff buff, Rounds? duration = null)
 		{
 			throw new DeadEndException("source_ApplyBuff");
 		}
+		#endregion
 
 		[ModifiesMember("ApplyBuff")]
 		public static Buff mod_ApplyBuff(UnitEntityData target, BlueprintBuff buff, Rounds? duration = null)

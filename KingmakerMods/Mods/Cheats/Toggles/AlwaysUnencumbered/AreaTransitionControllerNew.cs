@@ -8,29 +8,20 @@ namespace KingmakerMods.Mods.Cheats.Toggles.AlwaysUnencumbered
 	[ModifiesType]
 	public class AreaTransitionControllerNew : AreaTransitionController
 	{
-		[NewMember]
-		private static bool _cfgInit;
-
-		[NewMember]
-		private static bool _useMod;
-
+		#region DUPLICATES
 		[NewMember]
 		[DuplicatesBody("CanNotMove")]
 		public static bool source_CanNotMove(AreaTransition areaTransition, bool silent = false)
 		{
 			throw new DeadEndException("source_CanNotMove");
 		}
+		#endregion
 
 		[ModifiesMember("CanNotMove")]
 		public static bool mod_CanNotMove(AreaTransition areaTransition, bool silent = false)
 		{
-			if (!_cfgInit)
-			{
-				_cfgInit = true;
-				_useMod = UserConfig.Parser.GetValueAsBool("Cheats", "bAlwaysUnencumbered");
-			}
-
-			if (_useMod)
+			// ReSharper disable once ConvertIfStatementToReturnStatement
+			if (KingmakerPatchSettings.Cheats.AlwaysUnencumbered)
 			{
 				return false;
 			}

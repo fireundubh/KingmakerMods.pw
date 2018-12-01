@@ -13,8 +13,10 @@ namespace KingmakerMods.Mods.Fixes
 	[ModifiesType]
 	public class SaveLoadPortraitsNew : SaveLoadPortraits
 	{
+		#region ALIASES
 		[ModifiesMember("m_Portraits", ModificationScope.Nothing)]
-		private List<SaveLoadPortait> mod_m_Portraits;
+		private List<SaveLoadPortait> alias_m_Portraits;
+		#endregion
 
 		[ModifiesMember("Set")]
 		public void mod_Set(SaveInfo saveInfo)
@@ -26,16 +28,16 @@ namespace KingmakerMods.Mods.Fixes
 				return;
 			}
 
-			List<Sprite> list = new List<Sprite>();
+			var list = new List<Sprite>();
 
 			if (saveInfo.PartyPortraits != null)
 			{
 				list.AddRange(saveInfo.PartyPortraits.Where(companions => companions != null).Distinct().Select(companions => companions.Data.SmallPortrait));
 			}
 
-			for (int i = 0; i < this.mod_m_Portraits.Count; i++)
+			for (var i = 0; i < this.alias_m_Portraits.Count; i++)
 			{
-				this.mod_m_Portraits[i].Set(list.Count > i ? list[i] : null);
+				this.alias_m_Portraits[i].Set(list.Count > i ? list[i] : null);
 			}
 		}
 	}

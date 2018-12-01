@@ -9,48 +9,31 @@ namespace KingmakerMods.Mods.UI.Toggles.ItemSellPriceLabel
 	[ModifiesType("Kingmaker.UI.Common.UIUtilityTexts")]
 	public static class UIUtilityTextsNew
 	{
-		[NewMember]
-		private static bool _cfgInit;
-
-		[NewMember]
-		private static bool _useMod;
-
-		[NewMember]
-		private static bool IsModReady()
-		{
-			if (!_cfgInit)
-			{
-				_cfgInit = true;
-				_useMod = UserConfig.Parser.GetValueAsBool("UI", "bAddLabelToSellCost");
-			}
-
-			return _useMod;
-		}
-
+		#region DUPLICATES
 		[NewMember]
 		[DuplicatesBody("GetItemCost")]
 		public static string source_GetItemCost(ItemEntity item)
 		{
 			throw new DeadEndException("source_GetItemCost");
 		}
+		#endregion
 
 		[ModifiesMember("GetItemCost")]
 		public static string mod_GetItemCost(ItemEntity item)
 		{
-			_useMod = IsModReady();
-
-			if (!_useMod)
+			if (!KingmakerPatchSettings.UI.AddLabelToSellCost)
 			{
 				return source_GetItemCost(item);
 			}
 
-			if (item.IsIdentified)
+			if (!item.IsIdentified)
 			{
-				string sellForLabel = LocalizationManagerNew.LoadString("2f09e1be-86de-460d-96be-8a8ca72d456f");
-				return string.Format(sellForLabel, Kingmaker.Game.Instance.Vendor.GetItemSellPrice(item) * item.Count);
+				return LocalizedTexts.Instance.UserInterfacesText.Tooltips.Unidentified;
 			}
 
-			return LocalizedTexts.Instance.UserInterfacesText.Tooltips.Unidentified;
+			string sellForLabel = LocalizationManagerNew.LoadString("2f09e1be-86de-460d-96be-8a8ca72d456f");
+
+			return string.Format(sellForLabel, Kingmaker.Game.Instance.Vendor.GetItemSellPrice(item) * item.Count);
 		}
 	}
 }

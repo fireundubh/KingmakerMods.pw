@@ -3,7 +3,6 @@ using Kingmaker.EntitySystem.Entities;
 using Kingmaker.Items;
 using Kingmaker.UnitLogic.FactLogic;
 using Kingmaker.UnitLogic.Parts;
-using KingmakerMods.Helpers;
 using Patchwork;
 using UnityEngine;
 
@@ -12,53 +11,18 @@ namespace KingmakerMods.Mods.Cheats.Configurables.VendorLogic
 	[ModifiesType]
 	public class VendorLogicNew : Kingmaker.Items.VendorLogic
 	{
-		[NewMember]
-		private static bool _cfgInit;
-
-		[NewMember]
-		private static bool _useMod;
-
-		[NewMember]
-		private static int _persuasionCap;
-
-		[NewMember]
-		private static int _sellDivisor;
-
-		[NewMember]
-		private static int _buyDivisor;
-
+		#region ALIASES
 		[ModifiesMember("m_Vendor", ModificationScope.Nothing)]
-		private UnitEntityData mod_m_Vendor;
+		private UnitEntityData alias_m_Vendor;
 
 		[ModifiesMember("m_VendorPrices", ModificationScope.Nothing)]
-		private ChangeVendorPrices mod_m_VendorPrices;
-
-		[NewMember]
-		[DuplicatesBody("BeginTrading")]
-		public void source_BeginTrading(UnitEntityData vendor)
-		{
-			throw new DeadEndException("source_BeginTrading");
-		}
-
-		[ModifiesMember("BeginTrading")]
-		public void mod_BeginTrading(UnitEntityData vendor)
-		{
-			if (!_cfgInit)
-			{
-				_cfgInit = true;
-				_useMod = UserConfig.Parser.GetValueAsBool("Game.VendorLogic", "bBuyLowSellHigh");
-				_persuasionCap = UserConfig.Parser.GetValueAsInt("Game.VendorLogic", "iPersuasionCap");
-				_sellDivisor = UserConfig.Parser.GetValueAsInt("Game.VendorLogic", "iSellDivisor");
-				_buyDivisor = UserConfig.Parser.GetValueAsInt("Game.VendorLogic", "iBuyDivisor");
-			}
-
-			this.source_BeginTrading(vendor);
-		}
+		private ChangeVendorPrices alias_m_VendorPrices;
+		#endregion
 
 		[NewMember]
 		private static int mod_GetHighestPersuasionScore()
 		{
-			int result = 0;
+			var result = 0;
 
 			bool isCapital = Kingmaker.Game.Instance.CurrentlyLoadedArea.IsCapital;
 
@@ -69,18 +33,13 @@ namespace KingmakerMods.Mods.Cheats.Configurables.VendorLogic
 				result = Mathf.Max(partyMember.Stats.SkillPersuasion.ModifiedValue, result);
 			}
 
-			return result > _persuasionCap ? _persuasionCap : result;
+			return result > KingmakerPatchSettings.BuyLowSellHigh.PersuasionCap ? KingmakerPatchSettings.BuyLowSellHigh.PersuasionCap : result;
 		}
 
 		[NewMember]
 		private static double mod_CalculatePersuasionEffect(bool type)
 		{
-			int divisor = type ? _sellDivisor : _buyDivisor;
-
-			if (divisor == 0)
-			{
-				divisor = 40;
-			}
+			int divisor = type ? KingmakerPatchSettings.BuyLowSellHigh.SellDivisor : KingmakerPatchSettings.BuyLowSellHigh.BuyDivisor;
 
 			int highestPersuasionScore = mod_GetHighestPersuasionScore();
 
@@ -94,17 +53,18 @@ namespace KingmakerMods.Mods.Cheats.Configurables.VendorLogic
 
 			if (this.IsTrading)
 			{
-				modifiedPrice *= this.mod_m_Vendor.Ensure<UnitPartVendor>().SellPriceModifier;
+				modifiedPrice *= this.alias_m_Vendor.Ensure<UnitPartVendor>().SellPriceModifier;
 			}
 
-			if (_useMod)
+			// ReSharper disable once InvertIf
+			if (KingmakerPatchSettings.BuyLowSellHigh.Enabled)
 			{
 				double persuasionEffect = 1f + mod_CalculatePersuasionEffect(true);
 
 				modifiedPrice *= persuasionEffect;
 			}
 
-			return (long) Mathf.RoundToInt((long) modifiedPrice);
+			return Mathf.RoundToInt((long) modifiedPrice);
 		}
 
 		[ModifiesMember("GetItemBuyPrice")]
@@ -117,25 +77,26 @@ namespace KingmakerMods.Mods.Cheats.Configurables.VendorLogic
 
 			double modifiedCost;
 
-			if (this.mod_m_VendorPrices)
+			if (this.alias_m_VendorPrices)
 			{
-				modifiedCost = this.mod_m_VendorPrices.GetCost(item.Blueprint);
+				modifiedCost = this.alias_m_VendorPrices.GetCost(item.Blueprint);
 			}
 			else
 			{
 				modifiedCost = item.Cost;
 			}
 
-			modifiedCost *= this.mod_m_Vendor.Ensure<UnitPartVendor>().PriceModifier;
+			modifiedCost *= this.alias_m_Vendor.Ensure<UnitPartVendor>().PriceModifier;
 
-			if (_useMod)
+			// ReSharper disable once InvertIf
+			if (KingmakerPatchSettings.BuyLowSellHigh.Enabled)
 			{
 				double persuasionEffect = 1f - mod_CalculatePersuasionEffect(false);
 
 				modifiedCost *= persuasionEffect;
 			}
 
-			return (long) Mathf.RoundToInt((long) modifiedCost);
+			return Mathf.RoundToInt((long) modifiedCost);
 		}
 	}
 }

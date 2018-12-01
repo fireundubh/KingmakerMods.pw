@@ -9,23 +9,22 @@ namespace AppInfoDLLProj
 	{
 		public override AppInfo CreateInfo(DirectoryInfo folderInfo)
 		{
-			AppInfo ai = new AppInfo
+			var ai = new AppInfo
 			{
 				AppName = "Pathfinder: Kingmaker",
-				AppVersion = "1.0.16",
+				AppVersion = "1.0.17",
 				BaseDirectory = folderInfo
 			};
 
-			ai.Executable = new FileInfo(Combine(ai.BaseDirectory.ToString(), "Kingmaker.exe"));
-			//ai.IconLocation = new FileInfo("D:/Games/Tyranny/goggame-1266051739.ico");
+			string appPath = Combine(ai.BaseDirectory.ToString(), "Kingmaker.exe");
+			ai.Executable = new FileInfo(appPath);
 
 			return ai;
 		}
 
 		public static string Combine(params string[] paths)
 		{
-			string current = paths.Aggregate(@"", Path.Combine);
-			return current;
+			return paths.Aggregate(@"", Path.Combine);
 		}
 	}
 }

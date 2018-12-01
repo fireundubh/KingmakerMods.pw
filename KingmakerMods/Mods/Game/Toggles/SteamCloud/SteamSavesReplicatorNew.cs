@@ -7,33 +7,16 @@ namespace KingmakerMods.Mods.Game.Toggles.SteamCloud
 	[ModifiesType]
 	public class SteamSavesReplicatorNew : SteamSavesReplicator
 	{
-		[NewMember]
-		private static bool _cfgInit;
-
-		[NewMember]
-		private static bool _useMod;
-
-		[NewMember]
-		private static bool IsModReady()
-		{
-			if (!_cfgInit)
-			{
-				_cfgInit = true;
-				_useMod = UserConfig.Parser.GetValueAsBool("Game", "bDisableSteamCloud");
-			}
-
-			return _useMod;
-		}
-
 		// Initialize cannot be patched because...
 		// [FTL] Encountered a feature that isn't supported. Details: MetadataType not supported: RequiredModifier
 
-//		[NewMember]
-//		[DuplicatesBody("Initialize")]
-//		public void source_Initialize()
-//		{
-//			throw new DeadEndException("source_Initialize");
-//		}
+		#region DUPLICATES
+		//		[NewMember]
+		//		[DuplicatesBody("Initialize")]
+		//		public void source_Initialize()
+		//		{
+		//			throw new DeadEndException("source_Initialize");
+		//		}
 
 		[NewMember]
 		[DuplicatesBody("PullUpdates")]
@@ -55,24 +38,23 @@ namespace KingmakerMods.Mods.Game.Toggles.SteamCloud
 		{
 			throw new DeadEndException("source_RegisterSave");
 		}
+		#endregion
 
-//		[ModifiesMember("Initialize")]
-//		public void mod_Initialize()
-//		{
-//			_useMod = IsModReady();
-//
-//			if (!_useMod)
-//			{
-//				this.source_Initialize();
-//			}
-//		}
+		//		[ModifiesMember("Initialize")]
+		//		public void mod_Initialize()
+		//		{
+		//			_useMod = IsModReady();
+		//
+		//			if (!_useMod)
+		//			{
+		//				this.source_Initialize();
+		//			}
+		//		}
 
 		[ModifiesMember("PullUpdates")]
 		public void mod_PullUpdates()
 		{
-			_useMod = IsModReady();
-
-			if (!_useMod)
+			if (!KingmakerPatchSettings.Game.DisableSteamCloud)
 			{
 				this.source_PullUpdates();
 			}
@@ -81,9 +63,7 @@ namespace KingmakerMods.Mods.Game.Toggles.SteamCloud
 		[ModifiesMember("DeleteSave")]
 		public void mod_DeleteSave(SaveInfo saveInfo)
 		{
-			_useMod = IsModReady();
-
-			if (!_useMod)
+			if (!KingmakerPatchSettings.Game.DisableSteamCloud)
 			{
 				this.source_DeleteSave(saveInfo);
 			}
@@ -92,9 +72,7 @@ namespace KingmakerMods.Mods.Game.Toggles.SteamCloud
 		[ModifiesMember("RegisterSave")]
 		public void mod_RegisterSave(SaveInfo saveInfo)
 		{
-			_useMod = IsModReady();
-
-			if (!_useMod)
+			if (!KingmakerPatchSettings.Game.DisableSteamCloud)
 			{
 				this.source_RegisterSave(saveInfo);
 			}

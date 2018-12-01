@@ -11,35 +11,27 @@ namespace KingmakerMods.Mods.Game.Configurables.CurrencyFallback
 	[ModifiesType]
 	public class KingdomUISettlementWindowNew : KingdomUISettlementWindow
 	{
-		[NewMember]
-		private static bool _cfgInit;
-
-		[NewMember]
-		private static bool _useMod;
-
+		#region ALIASES
 		[ModifiesMember("m_InputNameField", ModificationScope.Nothing)]
-		private TMP_InputField source_m_InputNameField;
+		private TMP_InputField alias_m_InputNameField;
 
 		[ModifiesMember("m_Build", ModificationScope.Nothing)]
-		private Button source_m_Build;
+		private Button alias_m_Build;
+		#endregion
 
+		#region DUPLICATES
 		[NewMember]
 		[DuplicatesBody("UpdateBuildEnabled")]
 		public void source_UpdateBuildEnabled()
 		{
 			throw new DeadEndException("source_UpdateBuildEnabled");
 		}
+		#endregion
 
 		[ModifiesMember("UpdateBuildEnabled")]
 		public void mod_UpdateBuildEnabled()
 		{
-			if (!_cfgInit)
-			{
-				_cfgInit = true;
-				_useMod = UserConfig.Parser.GetValueAsBool("Game.KingdomEvents", "bCurrencyFallback");
-			}
-
-			if (!_useMod)
+			if (!KingmakerPatchSettings.CurrencyFallback.Enabled)
 			{
 				this.source_UpdateBuildEnabled();
 				return;
@@ -49,10 +41,10 @@ namespace KingmakerMods.Mods.Game.Configurables.CurrencyFallback
 
 			if (canAfford)
 			{
-				canAfford = !this.source_m_InputNameField.text.Empty();
+				canAfford = !this.alias_m_InputNameField.text.Empty();
 			}
 
-			this.source_m_Build.interactable = canAfford;
+			this.alias_m_Build.interactable = canAfford;
 		}
 	}
 }

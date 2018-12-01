@@ -14,12 +14,14 @@ namespace KingmakerMods.Mods.Fixes
 	[ModifiesType]
 	public class Familiar : Kingmaker.Visual.Critters.Familiar
 	{
+		#region DUPLICATES
 		[NewMember]
 		[DuplicatesBody("Update")]
 		private void source_Update()
 		{
 			throw new DeadEndException("source_Update");
 		}
+		#endregion
 
 		[ModifiesMember("Update")]
 		private void mod_Update()

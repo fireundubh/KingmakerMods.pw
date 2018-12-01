@@ -10,18 +10,6 @@ namespace KingmakerMods.Mods.Game.Configurables.PointBuy
 	[ModifiesType]
 	public class LevelUpStateNew : LevelUpState
 	{
-		[NewMember]
-		private static bool _cfgInit;
-
-		[NewMember]
-		private static bool _useMod;
-
-		[NewMember]
-		private static int _pointBuyPlayer;
-
-		[NewMember]
-		private static int _pointBuyCompanion;
-
 		[ToggleFieldAttributes(FieldAttributes.InitOnly)]
 		[ModifiesAccessibility("m_Unit")]
 		private UnitDescriptor mod_m_Unit;
@@ -57,20 +45,6 @@ namespace KingmakerMods.Mods.Game.Configurables.PointBuy
 			this.AlignmentRestriction = new AlignmentRestriction();
 			this.StatsDistribution = new StatsDistribution();
 
-			if (!_cfgInit)
-			{
-				_cfgInit = true;
-				_useMod = UserConfig.Parser.GetValueAsBool("Game.PointBuy", "bEnabled");
-				_pointBuyPlayer = UserConfig.Parser.GetValueAsInt("Game.PointBuy", "iPlayerAttributePoints");
-				_pointBuyCompanion = UserConfig.Parser.GetValueAsInt("Game.PointBuy", "iCompanionAttributePoints");
-			}
-
-			if (!_useMod)
-			{
-				_pointBuyPlayer = 25;
-				_pointBuyCompanion = 20;
-			}
-
 			this.mod_m_Unit = unit;
 			this.mod_NextLevel = unit.Progression.CharacterLevel + 1;
 
@@ -80,7 +54,17 @@ namespace KingmakerMods.Mods.Game.Configurables.PointBuy
 
 				if (!isPregen)
 				{
-					int pointCount = unit.IsCustomCompanion() ? _pointBuyCompanion : _pointBuyPlayer;
+					int pointCount;
+
+					if (unit.IsCustomCompanion())
+					{
+						pointCount = KingmakerPatchSettings.PointBuy.Enabled ? KingmakerPatchSettings.PointBuy.CompanionAttributePoints : 20;
+					}
+					else
+					{
+						pointCount = KingmakerPatchSettings.PointBuy.Enabled ? KingmakerPatchSettings.PointBuy.PlayerAttributePoints : 25;
+					}
+
 					this.StatsDistribution.Start(pointCount);
 				}
 

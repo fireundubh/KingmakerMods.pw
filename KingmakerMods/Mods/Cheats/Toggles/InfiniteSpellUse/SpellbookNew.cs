@@ -12,34 +12,25 @@ namespace KingmakerMods.Mods.Cheats.Toggles.InfiniteSpellUse
 	[ModifiesType]
 	public class SpellbookNew : Spellbook
 	{
-		[NewMember]
-		private static bool _cfgInit;
-
-		[NewMember]
-		private static bool _useMod;
-
+		#region DUPLICATES
 		[NewMember]
 		[DuplicatesBody("SpendInternal")]
 		private bool source_SpendInternal([NotNull] BlueprintAbility blueprint, [CanBeNull] AbilityData spell, bool doSpend, bool excludeSpecial = false)
 		{
 			throw new DeadEndException("source_SpendInternal");
 		}
+		#endregion
 
 		[ModifiesMember("Spend")]
 		public bool mod_Spend(AbilityData spell, bool excludeSpecial = false)
 		{
-			if (!_cfgInit)
+			// ReSharper disable once ConvertIfStatementToReturnStatement
+			if (KingmakerPatchSettings.Cheats.InfiniteSpellUse)
 			{
-				_cfgInit = true;
-				_useMod = UserConfig.Parser.GetValueAsBool("Cheats", "bInfiniteSpellUse");
+				return this.source_SpendInternal(spell.Blueprint, spell, !spell.Caster.Unit.IsPlayerFaction, excludeSpecial);
 			}
 
-			if (!_useMod)
-			{
-				return this.source_SpendInternal(spell.Blueprint, spell, true, excludeSpecial);
-			}
-
-			return this.source_SpendInternal(spell.Blueprint, spell, !spell.Caster.Unit.IsPlayerFaction, excludeSpecial);
+			return this.source_SpendInternal(spell.Blueprint, spell, true, excludeSpecial);
 		}
 
 		[Obsolete]

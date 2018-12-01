@@ -1,17 +1,20 @@
 ﻿using Kingmaker.Visual.FogOfWar;
 using Patchwork;
-using System.Linq;
+using KingmakerMods.Helpers;
 
 namespace KingmakerMods.Mods.Cheats.Toggles.NoFogOfWar
 {
 	[ModifiesType]
 	public class FogOfWarSettingsNew : FogOfWarSettings
 	{
+		#region DUPLICATES
 		[NewMember]
-		private static bool _cfgInit;
-
-		[NewMember]
-		private static bool _useMod;
+		[DuplicatesBody("get_Radius")]
+		public float source_get_Radius()
+		{
+			throw new DeadEndException("source_get_Radius");
+		}
+		#endregion
 
 		[ModifiesMember("Radius")]
 		public float mod_Radius
@@ -19,37 +22,7 @@ namespace KingmakerMods.Mods.Cheats.Toggles.NoFogOfWar
 			[ModifiesMember("get_Radius")]
 			get
 			{
-				if (!_cfgInit)
-				{
-					_cfgInit = true;
-					_useMod = UserConfig.Parser.GetValueAsBool("Cheats", "bDisableFogOfWar");
-				}
-
-				if (!_useMod)
-				{
-					float radiusBase;
-
-					if (this.IsGlobalMap)
-					{
-						if (Kingmaker.Game.Instance != null && Kingmaker.Game.Instance.Player != null && Kingmaker.Game.Instance.Player.ControllableCharacters != null)
-						{
-							float highestPerceptionScore = Kingmaker.Game.Instance.Player.ControllableCharacters.Select(u => u.Stats.SkillPerception.ModifiedValue).Max();
-							radiusBase = 1f + highestPerceptionScore / 4f;
-						}
-						else
-						{
-							radiusBase = 7f;
-						}
-					}
-					else
-					{
-						radiusBase = 11.7f;
-					}
-
-					return radiusBase + this.BorderOffset;
-				}
-
-				return float.MaxValue;
+				return KingmakerPatchSettings.Cheats.DisableFogOfWar ? float.MaxValue : this.source_get_Radius();
 			}
 		}
 	}
