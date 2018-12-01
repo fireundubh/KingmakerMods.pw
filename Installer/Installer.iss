@@ -64,6 +64,7 @@ Source: "E:\repos\KingmakerMods.pw Launcher\PatchworkLauncher\bin\Release\prefer
 Source: "E:\repos\KingmakerMods.pw Launcher\PatchworkLauncher\bin\Release\Serilog.Sinks.File.xml"; DestDir: "{app}"; Flags: ignoreversion
 Source: "E:\repos\KingmakerMods.pw Launcher\PatchworkLauncher\bin\Release\Serilog.xml"; DestDir: "{app}"; Flags: ignoreversion
 Source: "E:\repos\KingmakerMods.pw\KingmakerMods.ini"; DestDir: "{code:GamePathOrCustom}"; Flags: ignoreversion confirmoverwrite uninsneveruninstall
+Source: "E:\repos\KingmakerMods.pw\UserConfig.ini"; DestDir: "{code:GamePathOrCustom}"; Flags: ignoreversion
 Source: "E:\repos\KingmakerMods.pw Launcher\PatchworkLauncher\bin\Release\Patchwork.Attributes.dll"; DestDir: "{code:GamePathOrCustom}\Kingmaker_Data\Managed"; Flags: ignoreversion
 Source: "E:\repos\UserConfig\packages\ini-parser.2.5.2\lib\net20\INIFileParser.dll"; DestDir: "{code:GamePathOrCustom}\Kingmaker_Data\Managed"; Flags: ignoreversion
 Source: "E:\repos\UserConfig\UserConfig\bin\Release\UserConfig.dll"; DestDir: "{code:GamePathOrCustom}\Kingmaker_Data\Managed"; Flags: ignoreversion
