@@ -6,6 +6,43 @@ namespace KingmakerMods
 	public static class KingmakerPatchSettings
 	{
 		[NewType]
+		public static class Affection
+		{
+			private const string SECTION = "Cheats.Affection";
+
+			public static bool IncreaseMultEnabled { get; set; }
+
+			public static float IncreaseMultAmount { get; set; }
+
+			public static bool DecreaseMultEnabled { get; set; }
+
+			public static float DecreaseMultAmount { get; set; }
+
+			public static bool FixedAffectionIncreaseEnabled { get; set; }
+
+			public static int FixedAffectionIncreaseAmount { get; set; }
+
+			public static bool FixedAffectionDecreaseEnabled { get; set; }
+
+			public static int FixedAffectionDecreaseAmount { get; set; }
+
+			static Affection()
+			{
+				IncreaseMultEnabled = UserConfig.Parser.TryGetBool(SECTION, "bIncreaseMultEnabled");
+				IncreaseMultAmount  = UserConfig.Parser.TryGetFloat(SECTION, "fIncreaseMult", 1f);
+
+				DecreaseMultEnabled = UserConfig.Parser.TryGetBool(SECTION, "bDecreaseMultEnabled");
+				DecreaseMultAmount  = UserConfig.Parser.TryGetFloat(SECTION, "fDecreaseMult", 1f);
+
+				FixedAffectionIncreaseEnabled = UserConfig.Parser.TryGetBool(SECTION, "bFixedIncreaseEnabled");
+				FixedAffectionIncreaseAmount  = UserConfig.Parser.TryGetInt(SECTION, "iFixedIncrease", 1);
+
+				FixedAffectionDecreaseEnabled = UserConfig.Parser.TryGetBool(SECTION, "bFixedDecreaseEnabled");
+				FixedAffectionDecreaseAmount  = UserConfig.Parser.TryGetInt(SECTION, "iFixedDecrease", -1);
+			}
+		}
+
+		[NewType]
 		public static class AttributeUncapper
 		{
 			private const string SECTION = "Cheats.AttributeUncapper";
@@ -22,7 +59,7 @@ namespace KingmakerMods
 
 			static AttributeUncapper()
 			{
-				Enabled = UserConfig.Parser.TryGetBool(SECTION, "bEnabled");
+				Enabled      = UserConfig.Parser.TryGetBool(SECTION, "bEnabled");
 				AttributeMax = UserConfig.Parser.TryGetInt(SECTION, "iAttributeMax", 18, true, 18, int.MaxValue);
 			}
 		}
@@ -59,9 +96,9 @@ namespace KingmakerMods
 
 			static BuyLowSellHigh()
 			{
-				Enabled = UserConfig.Parser.TryGetBool(SECTION, "bBuyLowSellHigh");
-				BuyDivisor = UserConfig.Parser.TryGetInt(SECTION, "iBuyDivisor", 40, true, 1, int.MaxValue);
-				SellDivisor = UserConfig.Parser.TryGetInt(SECTION, "iSellDivisor", 40, true, 1, int.MaxValue);
+				Enabled       = UserConfig.Parser.TryGetBool(SECTION, "bBuyLowSellHigh");
+				BuyDivisor    = UserConfig.Parser.TryGetInt(SECTION, "iBuyDivisor", 40, true, 1, int.MaxValue);
+				SellDivisor   = UserConfig.Parser.TryGetInt(SECTION, "iSellDivisor", 40, true, 1, int.MaxValue);
 				PersuasionCap = UserConfig.Parser.TryGetInt(SECTION, "iPersuasionCap", 20);
 			}
 		}
@@ -84,12 +121,12 @@ namespace KingmakerMods
 
 			static CameraRig()
 			{
-				Enabled = UserConfig.Parser.TryGetBool(SECTION, "bEnabled");
-				ScrollRubberBand = UserConfig.Parser.TryGetFloat(SECTION, "fScrollRubberBand", 4f);
-				ScrollRubberBandCamp = UserConfig.Parser.TryGetFloat(SECTION, "fScrollRubberBandCamp", 3f);
+				Enabled               = UserConfig.Parser.TryGetBool(SECTION, "bEnabled");
+				ScrollRubberBand      = UserConfig.Parser.TryGetFloat(SECTION, "fScrollRubberBand", 4f);
+				ScrollRubberBandCamp  = UserConfig.Parser.TryGetFloat(SECTION, "fScrollRubberBandCamp", 3f);
 				ScrollScreenThreshold = UserConfig.Parser.TryGetFloat(SECTION, "fScrollScreenThreshold", 4f);
-				ScrollSpeed = UserConfig.Parser.TryGetFloat(SECTION, "fScrollSpeed", 25f);
-				DragScrollSpeed = UserConfig.Parser.TryGetFloat(SECTION, "fDragScrollSpeed", 1f);
+				ScrollSpeed           = UserConfig.Parser.TryGetFloat(SECTION, "fScrollSpeed", 25f);
+				DragScrollSpeed       = UserConfig.Parser.TryGetFloat(SECTION, "fDragScrollSpeed", 1f);
 			}
 		}
 
@@ -111,11 +148,11 @@ namespace KingmakerMods
 
 			static CameraZoom()
 			{
-				Enabled = UserConfig.Parser.TryGetBool(SECTION, "bEnabled");
-				CameraZoomMax = UserConfig.Parser.TryGetFloat(SECTION, "fCameraZoomMax", 22f);
-				CameraZoomMaxCutscene = UserConfig.Parser.TryGetFloat(SECTION, "fCameraZoomMaxCutscene", 22f);
-				CameraZoomMaxDialog = UserConfig.Parser.TryGetFloat(SECTION, "fCameraZoomMaxDialog", 22f);
-				CameraZoomMaxGlobalMap = UserConfig.Parser.TryGetFloat(SECTION, "fCameraZoomMaxGlobalMap", 28.3f);
+				Enabled                 = UserConfig.Parser.TryGetBool(SECTION, "bEnabled");
+				CameraZoomMax           = UserConfig.Parser.TryGetFloat(SECTION, "fCameraZoomMax", 22f);
+				CameraZoomMaxCutscene   = UserConfig.Parser.TryGetFloat(SECTION, "fCameraZoomMaxCutscene", 22f);
+				CameraZoomMaxDialog     = UserConfig.Parser.TryGetFloat(SECTION, "fCameraZoomMaxDialog", 22f);
+				CameraZoomMaxGlobalMap  = UserConfig.Parser.TryGetFloat(SECTION, "fCameraZoomMaxGlobalMap", 28.3f);
 				CameraZoomMaxSettlement = UserConfig.Parser.TryGetFloat(SECTION, "fCameraZoomMaxSettlement", 22f);
 			}
 		}
@@ -141,6 +178,8 @@ namespace KingmakerMods
 			/// When true, your party will always have light encumbrance in areas or on the world map.
 			/// </summary>
 			public static bool AlwaysUnencumbered { get; set; }
+
+			public static bool CookingRequiresNoIngredients { get; set; }
 
 			/// <summary>
 			/// When true, fog of war will be disabled.
@@ -187,19 +226,29 @@ namespace KingmakerMods
 			/// </summary>
 			public static bool NoFriendlyFireAOE { get; set; }
 
+			public static bool Undetectable { get; set; }
+
+			public static bool UndetectableStealthAttacks { get; set; }
+
+			public static bool UnlockCookingRecipes { get; set; }
+
 			static Cheats()
 			{
 				AllowSpontaneousCastersToCopyScrolls = UserConfig.Parser.TryGetBool(SECTION, "bAllowSpontaneousCastersToCopyScrolls");
-				AlwaysUnencumbered = UserConfig.Parser.TryGetBool(SECTION, "bAlwaysUnencumbered");
-				DisableFogOfWar = UserConfig.Parser.TryGetBool(SECTION, "bDisableFogOfWar");
-				InfiniteAbilityUse = UserConfig.Parser.TryGetBool(SECTION, "bInfiniteAbilityUse");
-				InfiniteItemUse = UserConfig.Parser.TryGetBool(SECTION, "bInfiniteItemUse");
-				InfiniteSpellUse = UserConfig.Parser.TryGetBool(SECTION, "bInfiniteSpellUse");
-				InstantCooldowns = UserConfig.Parser.TryGetBool(SECTION, "bInstantCooldowns");
-				InstantPartyChange = UserConfig.Parser.TryGetBool(SECTION, "bInstantPartyChange");
-				NeverFailSkillChecks = UserConfig.Parser.TryGetBool(SECTION, "bNeverFailSkillChecks");
-				NoFriendlyFire = UserConfig.Parser.TryGetBool(SECTION, "bNoFriendlyFire");
-				NoFriendlyFireAOE = UserConfig.Parser.TryGetBool(SECTION, "bNoFriendlyFireAOE");
+				AlwaysUnencumbered                   = UserConfig.Parser.TryGetBool(SECTION, "bAlwaysUnencumbered");
+				CookingRequiresNoIngredients         = UserConfig.Parser.TryGetBool(SECTION, "bCookingRequiresNoIngredients");
+				DisableFogOfWar                      = UserConfig.Parser.TryGetBool(SECTION, "bDisableFogOfWar");
+				InfiniteAbilityUse                   = UserConfig.Parser.TryGetBool(SECTION, "bInfiniteAbilityUse");
+				InfiniteItemUse                      = UserConfig.Parser.TryGetBool(SECTION, "bInfiniteItemUse");
+				InfiniteSpellUse                     = UserConfig.Parser.TryGetBool(SECTION, "bInfiniteSpellUse");
+				InstantCooldowns                     = UserConfig.Parser.TryGetBool(SECTION, "bInstantCooldowns");
+				InstantPartyChange                   = UserConfig.Parser.TryGetBool(SECTION, "bInstantPartyChange");
+				NeverFailSkillChecks                 = UserConfig.Parser.TryGetBool(SECTION, "bNeverFailSkillChecks");
+				NoFriendlyFire                       = UserConfig.Parser.TryGetBool(SECTION, "bNoFriendlyFire");
+				NoFriendlyFireAOE                    = UserConfig.Parser.TryGetBool(SECTION, "bNoFriendlyFireAOE");
+				Undetectable                         = UserConfig.Parser.TryGetBool(SECTION, "bUndetectable");
+				UndetectableStealthAttacks           = UserConfig.Parser.TryGetBool(SECTION, "bUndetectableStealthAttacks");
+				UnlockCookingRecipes                 = UserConfig.Parser.TryGetBool(SECTION, "bUnlockCookingRecipes");
 			}
 		}
 
@@ -226,8 +275,8 @@ namespace KingmakerMods
 			static CompanionCost()
 			{
 				UsePartyLevelAsCostMultiplier = UserConfig.Parser.TryGetBool(SECTION, "bUsePartyLevelAsCostMultiplier");
-				UseMultiplier = UserConfig.Parser.TryGetBool(SECTION, "bUseMultiplier");
-				CostMultiplier = UserConfig.Parser.TryGetInt(SECTION, "iCostMultiplier", 0);
+				UseMultiplier                 = UserConfig.Parser.TryGetBool(SECTION, "bUseMultiplier");
+				CostMultiplier                = UserConfig.Parser.TryGetInt(SECTION, "iCostMultiplier", 0);
 			}
 		}
 
@@ -242,7 +291,7 @@ namespace KingmakerMods
 
 			static CurrencyFallback()
 			{
-				Enabled = UserConfig.Parser.TryGetBool(SECTION, "bCurrencyFallback");
+				Enabled            = UserConfig.Parser.TryGetBool(SECTION, "bCurrencyFallback");
 				CurrencyMultiplier = UserConfig.Parser.TryGetInt(SECTION, "iCurrencyMultiplier", 80);
 			}
 		}
@@ -263,9 +312,9 @@ namespace KingmakerMods
 
 			static DeltaTime()
 			{
-				Enabled = UserConfig.Parser.TryGetBool(SECTION, "bEnabled");
-				CombatMultiplier = UserConfig.Parser.TryGetFloat(SECTION, "fCombatMultiplier", 1f);
-				GlobalMapMultiplier = UserConfig.Parser.TryGetFloat(SECTION, "fGlobalMapMultiplier", 1f);
+				Enabled               = UserConfig.Parser.TryGetBool(SECTION, "bEnabled");
+				CombatMultiplier      = UserConfig.Parser.TryGetFloat(SECTION, "fCombatMultiplier", 1f);
+				GlobalMapMultiplier   = UserConfig.Parser.TryGetFloat(SECTION, "fGlobalMapMultiplier", 1f);
 				OutOfCombatMultiplier = UserConfig.Parser.TryGetFloat(SECTION, "fOutOfCombatMultiplier", 1f);
 			}
 		}
@@ -289,7 +338,6 @@ namespace KingmakerMods
 			/// When true, Unity will no longer call home.
 			/// </summary>
 //			public static bool DisableAnalytics { get; set; }
-
 			/// <summary>
 			/// When true, the game history log will be disabled, reducing the size of statistic.json. Disabling history
 			/// potentially improves loading speed; however, this history is used by Owlcat Games for debugging.
@@ -328,16 +376,16 @@ namespace KingmakerMods
 
 			static Game()
 			{
-				CampsiteCleanup = UserConfig.Parser.TryGetBool(SECTION, "bCampsiteCleanup");
+				CampsiteCleanup     = UserConfig.Parser.TryGetBool(SECTION, "bCampsiteCleanup");
 				DisableAchievements = UserConfig.Parser.TryGetBool(SECTION, "bDisableAchievements");
 //				DisableAnalytics = UserConfig.Parser.TryGetBool(SECTION, "bDisableAnalytics");
-				DisableHistory = UserConfig.Parser.TryGetBool(SECTION, "bDisableHistory");
-				DisableSteamCloud = UserConfig.Parser.TryGetBool(SECTION, "bDisableSteamCloud");
-				Logging = UserConfig.Parser.TryGetBool(SECTION, "bLogging");
-				NoManLeftBehind = UserConfig.Parser.TryGetBool(SECTION, "bNoManLeftBehind");
-				RestAnywhere = UserConfig.Parser.TryGetBool(SECTION, "bRestAnywhere");
+				DisableHistory         = UserConfig.Parser.TryGetBool(SECTION, "bDisableHistory");
+				DisableSteamCloud      = UserConfig.Parser.TryGetBool(SECTION, "bDisableSteamCloud");
+				Logging                = UserConfig.Parser.TryGetBool(SECTION, "bLogging");
+				NoManLeftBehind        = UserConfig.Parser.TryGetBool(SECTION, "bNoManLeftBehind");
+				RestAnywhere           = UserConfig.Parser.TryGetBool(SECTION, "bRestAnywhere");
 				UnlockPremiumPortraits = UserConfig.Parser.TryGetBool(SECTION, "bUnlockPremiumPortraits");
-				UnlockPremiumRewards = UserConfig.Parser.TryGetBool(SECTION, "bUnlockPremiumRewards");
+				UnlockPremiumRewards   = UserConfig.Parser.TryGetBool(SECTION, "bUnlockPremiumRewards");
 			}
 		}
 
@@ -360,7 +408,7 @@ namespace KingmakerMods
 
 			static HighlightObjects()
 			{
-				Enabled = UserConfig.Parser.TryGetBool(SECTION, "bEnabled");
+				Enabled                     = UserConfig.Parser.TryGetBool(SECTION, "bEnabled");
 				SecondsBetweenTicksGameTime = UserConfig.Parser.TryGetInt(SECTION, "iSecondsBetweenTicksGameTime", 1);
 			}
 		}
@@ -376,7 +424,7 @@ namespace KingmakerMods
 
 			static KingdomAlignment()
 			{
-				Enabled = UserConfig.Parser.TryGetBool(SECTION, "bEnabled");
+				Enabled   = UserConfig.Parser.TryGetBool(SECTION, "bEnabled");
 				Alignment = UserConfig.Parser.TryGetString(SECTION, "sAlignment", "trueneutral");
 			}
 		}
@@ -401,7 +449,7 @@ namespace KingmakerMods
 			static KingdomEvents()
 			{
 				InstantComplete = UserConfig.Parser.TryGetBool(SECTION, "bInstantComplete");
-				MaximumEffort = UserConfig.Parser.TryGetBool(SECTION, "bMaximumEffort");
+				MaximumEffort   = UserConfig.Parser.TryGetBool(SECTION, "bMaximumEffort");
 			}
 		}
 
@@ -421,8 +469,8 @@ namespace KingmakerMods
 
 			static PointBuy()
 			{
-				Enabled = UserConfig.Parser.TryGetBool(SECTION, "bEnabled");
-				PlayerAttributePoints = UserConfig.Parser.TryGetInt(SECTION, "iPlayerAttributePoints", 25, true, 20, int.MaxValue);
+				Enabled                  = UserConfig.Parser.TryGetBool(SECTION, "bEnabled");
+				PlayerAttributePoints    = UserConfig.Parser.TryGetInt(SECTION, "iPlayerAttributePoints", 25, true, 20, int.MaxValue);
 				CompanionAttributePoints = UserConfig.Parser.TryGetInt(SECTION, "iCompanionAttributePoints", 20, true, 20, int.MaxValue);
 			}
 		}
@@ -453,24 +501,24 @@ namespace KingmakerMods
 
 			static RandomEncounters()
 			{
-				Enabled = UserConfig.Parser.TryGetBool(SECTION, "bEnabled");
-				EncountersEnabled = UserConfig.Parser.TryGetBool(SECTION, "bEncountersEnabled", true);
-				ChanceOnGlobalMap = UserConfig.Parser.TryGetFloat(SECTION, "fChanceOnGlobalMap", 0.3f, true);
-				ChanceOnCamp = UserConfig.Parser.TryGetFloat(SECTION, "fChanceOnCamp", 0.4f, true);
-				ChanceOnCampSecondTime = UserConfig.Parser.TryGetFloat(SECTION, "fChanceOnCampSecondTime", 0.1f, true);
-				HardEncounterChance = UserConfig.Parser.TryGetFloat(SECTION, "fHardEncounterChance", 0.05f, true);
-				HardEncounterMaxChance = UserConfig.Parser.TryGetFloat(SECTION, "fHardEncounterMaxChance", 0.9f, true);
-				HardEncounterChanceIncrease = UserConfig.Parser.TryGetFloat(SECTION, "fHardEncounterChanceIncrease", 0.05f, true);
-				StalkerAmbushChance = UserConfig.Parser.TryGetFloat(SECTION, "fStalkerAmbushChance", 0.25f, true);
-				RollMiles = UserConfig.Parser.TryGetFloat(SECTION, "fRollMiles", 8f);
-				SafeMilesAfterEncounter = UserConfig.Parser.TryGetFloat(SECTION, "fSafeMilesAfterEncounter", 16f);
-				EncounterMinBonusCR = UserConfig.Parser.TryGetInt(SECTION, "iEncounterMinBonusCR");
-				EncounterMaxBonusCR = UserConfig.Parser.TryGetInt(SECTION, "iEncounterMaxBonusCR", 1);
-				HardEncounterBonusCR = UserConfig.Parser.TryGetInt(SECTION, "iHardEncounterBonusCR", 3);
-				DefaultSafeZoneSize = UserConfig.Parser.TryGetFloat(SECTION, "fDefaultSafeZoneSize", 4f);
+				Enabled                            = UserConfig.Parser.TryGetBool(SECTION, "bEnabled");
+				EncountersEnabled                  = UserConfig.Parser.TryGetBool(SECTION, "bEncountersEnabled", true);
+				ChanceOnGlobalMap                  = UserConfig.Parser.TryGetFloat(SECTION, "fChanceOnGlobalMap", 0.3f, true);
+				ChanceOnCamp                       = UserConfig.Parser.TryGetFloat(SECTION, "fChanceOnCamp", 0.4f, true);
+				ChanceOnCampSecondTime             = UserConfig.Parser.TryGetFloat(SECTION, "fChanceOnCampSecondTime", 0.1f, true);
+				HardEncounterChance                = UserConfig.Parser.TryGetFloat(SECTION, "fHardEncounterChance", 0.05f, true);
+				HardEncounterMaxChance             = UserConfig.Parser.TryGetFloat(SECTION, "fHardEncounterMaxChance", 0.9f, true);
+				HardEncounterChanceIncrease        = UserConfig.Parser.TryGetFloat(SECTION, "fHardEncounterChanceIncrease", 0.05f, true);
+				StalkerAmbushChance                = UserConfig.Parser.TryGetFloat(SECTION, "fStalkerAmbushChance", 0.25f, true);
+				RollMiles                          = UserConfig.Parser.TryGetFloat(SECTION, "fRollMiles", 8f);
+				SafeMilesAfterEncounter            = UserConfig.Parser.TryGetFloat(SECTION, "fSafeMilesAfterEncounter", 16f);
+				EncounterMinBonusCR                = UserConfig.Parser.TryGetInt(SECTION, "iEncounterMinBonusCR");
+				EncounterMaxBonusCR                = UserConfig.Parser.TryGetInt(SECTION, "iEncounterMaxBonusCR", 1);
+				HardEncounterBonusCR               = UserConfig.Parser.TryGetInt(SECTION, "iHardEncounterBonusCR", 3);
+				DefaultSafeZoneSize                = UserConfig.Parser.TryGetFloat(SECTION, "fDefaultSafeZoneSize", 4f);
 				RandomEncounterAvoidanceFailMargin = UserConfig.Parser.TryGetInt(SECTION, "iRandomEncounterAvoidanceFailMargin", 5);
-				EncounterPawnOffset = UserConfig.Parser.TryGetFloat(SECTION, "fEncounterPawnOffset", 1.5f);
-				EncounterPawnDistanceFromLocation = UserConfig.Parser.TryGetFloat(SECTION, "fEncounterPawnDistanceFromLocation", 1.5f);
+				EncounterPawnOffset                = UserConfig.Parser.TryGetFloat(SECTION, "fEncounterPawnOffset", 1.5f);
+				EncounterPawnDistanceFromLocation  = UserConfig.Parser.TryGetFloat(SECTION, "fEncounterPawnDistanceFromLocation", 1.5f);
 			}
 		}
 
@@ -507,24 +555,11 @@ namespace KingmakerMods
 
 			static Restrictions()
 			{
-				IgnoreBuildingRestrictions = UserConfig.Parser.TryGetBool(SECTION, "bIgnoreBuildingRestrictions");
-				IgnoreDialogueAlignmentRestrictions = UserConfig.Parser.TryGetBool(SECTION, "bIgnoreDialogueAlignmentRestrictions");
+				IgnoreBuildingRestrictions           = UserConfig.Parser.TryGetBool(SECTION, "bIgnoreBuildingRestrictions");
+				IgnoreDialogueAlignmentRestrictions  = UserConfig.Parser.TryGetBool(SECTION, "bIgnoreDialogueAlignmentRestrictions");
 				IgnoreEquipmentAlignmentRestrictions = UserConfig.Parser.TryGetBool(SECTION, "bIgnoreEquipmentAlignmentRestrictions");
-				IgnoreEquipmentClassRestrictions = UserConfig.Parser.TryGetBool(SECTION, "bIgnoreEquipmentClassRestrictions");
-				IgnoreEquipmentStatRestrictions = UserConfig.Parser.TryGetBool(SECTION, "bIgnoreEquipmentStatRestrictions");
-			}
-		}
-
-		[NewType]
-		public static class System
-		{
-			private const string SECTION = "System";
-
-			public static bool IniLogging { get; set; }
-
-			static System()
-			{
-				IniLogging = UserConfig.Parser.TryGetBool(SECTION, "bINILogging");
+				IgnoreEquipmentClassRestrictions     = UserConfig.Parser.TryGetBool(SECTION, "bIgnoreEquipmentClassRestrictions");
+				IgnoreEquipmentStatRestrictions      = UserConfig.Parser.TryGetBool(SECTION, "bIgnoreEquipmentStatRestrictions");
 			}
 		}
 
@@ -546,7 +581,7 @@ namespace KingmakerMods
 			static UI()
 			{
 				AddSpellbookNameToCopyScrollAction = UserConfig.Parser.TryGetBool(SECTION, "bAddSpellbookNameToCopyScrollAction");
-				AddLabelToSellCost = UserConfig.Parser.TryGetBool(SECTION, "bAddLabelToSellCost");
+				AddLabelToSellCost                 = UserConfig.Parser.TryGetBool(SECTION, "bAddLabelToSellCost");
 			}
 		}
 
@@ -561,7 +596,7 @@ namespace KingmakerMods
 
 			static XPGain()
 			{
-				Enabled = UserConfig.Parser.TryGetBool(SECTION, "bEnabled");
+				Enabled      = UserConfig.Parser.TryGetBool(SECTION, "bEnabled");
 				XPMultiplier = UserConfig.Parser.TryGetFloat(SECTION, "fXPMultiplier", 1f);
 			}
 		}

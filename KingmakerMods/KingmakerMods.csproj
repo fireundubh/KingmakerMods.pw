@@ -82,6 +82,8 @@
     <Compile Include="Helpers\DeadEndException.cs" />
     <Compile Include="Helpers\KingmakerModsException.cs" />
     <Compile Include="Mods\Cheats\Configurables\KingdomEvents\KingdomEventNew.cs" />
+    <Compile Include="Mods\Cheats\Configurables\Affection\BlueprintRomanceCounterNew.cs" />
+    <Compile Include="Mods\Cheats\Toggles\CookingRequiresNoIngredients\BlueprintCookingRecipeNew.cs" />
     <Compile Include="Mods\Cheats\Toggles\InstantCooldowns\UnitCombatCooldownsControllerNew.cs" />
     <Compile Include="Mods\Cheats\Toggles\InstantCooldowns\UnitCooldownsHelper.cs" />
     <Compile Include="Mods\Cheats\Toggles\InstantCooldowns\UnitActivatableAbilitiesControllerNew.cs" />
@@ -91,7 +93,10 @@
     <Compile Include="Mods\Cheats\Toggles\NeverFailSkillChecks\RulePartySkillCheckNew.cs" />
     <Compile Include="Mods\Cheats\Toggles\NeverFailSkillChecks\RuleSkillCheckNew.cs" />
     <Compile Include="Mods\Cheats\Toggles\NeverFailSkillChecks\StaticEntityDataNew.cs" />
-    <Compile Include="Mods\Cheats\Toggles\Undetectable\StealthSwitchButtonNew.cs" />
+    <Compile Include="Mods\Cheats\Toggles\Undetectable\UnitStealthControllerNew.cs" />
+    <Compile Include="Mods\Cheats\Toggles\Undetectable\UnitStealthNew.cs" />
+    <Compile Include="Mods\Cheats\Toggles\UnlockCookingRecipes\CampingStateNew.cs" />
+    <Compile Include="Mods\Fixes\GroupControllerNew.cs" />
     <Compile Include="Mods\UI\Configurables\HighlightObjectsToggle\InteractionHighlightControllerNew.cs" />
     <Compile Include="Mods\UI\Configurables\HighlightObjectsToggle\KeyboardAccessNew.cs" />
     <Compile Include="Mods\Fixes\Familiar.cs" />
@@ -179,6 +184,6 @@
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>py3 "E:\projects\netbootstrap" -i "$(TargetPath)" -o "$(SolutionDir)PatchworkLauncher\$(OutDir)Mods\$(TargetFileName)" | py3 "E:\projects\netbootstrap" -i "$(TargetPath)" -o "C:\Users\fireundubh\AppData\Local\KingmakerMods.pw\Mods\$(TargetFileName)"</PostBuildEvent>
+    <PostBuildEvent>py3 "E:\projects\netbootstrap" -i "$(TargetPath)" -o "$(SolutionDir)PatchworkLauncher\$(OutDir)Mods\$(TargetFileName)" &amp;&amp; py3 "E:\projects\netbootstrap" -i "$(TargetPath)" -o "C:\Users\fireundubh\AppData\Local\KingmakerMods.pw\Mods\$(TargetFileName)"</PostBuildEvent>
   </PropertyGroup>
 </Project>
