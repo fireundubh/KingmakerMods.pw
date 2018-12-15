@@ -16,19 +16,28 @@ namespace KingmakerMods.Mods.Cheats.Toggles.NoFriendlyFireAOE
 	[ModifiesType]
 	public class AbilityTargetsAroundNew : AbilityTargetsAround
 	{
-		[ModifiesAccessibility("m_TargetType")]
-		public TargetType mod_m_TargetType;
+		#region ALIASES
 
-		[ModifiesAccessibility("m_Condition")]
-		public ConditionsChecker mod_m_Condition;
+		[ModifiesMember("m_TargetType", ModificationScope.Nothing)]
+		private TargetType alias_m_TargetType;
+
+		[ModifiesMember("m_Condition", ModificationScope.Nothing)]
+		private ConditionsChecker alias_m_Condition;
+
+		[ModifiesMember("m_IncludeDead", ModificationScope.Nothing)]
+		private bool alias_m_IncludeDead;
+
+		#endregion
 
 		#region DUPLICATES
+
 		[NewMember]
 		[DuplicatesBody("Select")]
 		public IEnumerable<TargetWrapper> source_Select(AbilityExecutionContext context, TargetWrapper anchor)
 		{
 			throw new DeadEndException("source_Select");
 		}
+
 		#endregion
 
 		[ModifiesMember("Select", ModificationScope.Body)]
@@ -41,7 +50,7 @@ namespace KingmakerMods.Mods.Cheats.Toggles.NoFriendlyFireAOE
 
 			UnitEntityData caster = context.MaybeCaster;
 
-			IEnumerable<UnitEntityData> targets = GameHelper.GetTargetsAround(anchor.Point, this.AoERadius);
+			IEnumerable<UnitEntityData> targets = GameHelper.GetTargetsAround(anchor.Point, this.AoERadius, true, this.alias_m_IncludeDead);
 
 			if (caster == null)
 			{
@@ -49,7 +58,7 @@ namespace KingmakerMods.Mods.Cheats.Toggles.NoFriendlyFireAOE
 				return Enumerable.Empty<TargetWrapper>();
 			}
 
-			switch (this.mod_m_TargetType)
+			switch (this.alias_m_TargetType)
 			{
 				case TargetType.Enemy:
 					targets = targets.Where(caster.IsEnemy);
@@ -59,7 +68,7 @@ namespace KingmakerMods.Mods.Cheats.Toggles.NoFriendlyFireAOE
 					break;
 			}
 
-			if (this.mod_m_Condition.HasConditions)
+			if (this.alias_m_Condition.HasConditions)
 			{
 				targets = targets.Where(u => this.HasConditions(context, u)).ToList();
 			}
@@ -77,7 +86,7 @@ namespace KingmakerMods.Mods.Cheats.Toggles.NoFriendlyFireAOE
 		{
 			using (context.GetDataScope(unit))
 			{
-				return this.mod_m_Condition.Check();
+				return this.alias_m_Condition.Check();
 			}
 		}
 	}

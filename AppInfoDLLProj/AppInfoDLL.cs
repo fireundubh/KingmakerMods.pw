@@ -12,12 +12,17 @@ namespace AppInfoDLLProj
 			var ai = new AppInfo
 			{
 				AppName = "Pathfinder: Kingmaker",
-				AppVersion = "1.0.18",
-				BaseDirectory = folderInfo
+				AppVersion = "1.0.19",
+				BaseDirectory = folderInfo,
+				GogAppID = "1982293831",
+				SteamAppID = "640820"
 			};
 
 			string appPath = Combine(ai.BaseDirectory.ToString(), "Kingmaker.exe");
 			ai.Executable = new FileInfo(appPath);
+
+			ai.GogArguments = string.Format("/command=runGame /gameId={0} /path=\"{1}\"", ai.GogAppID, ai.BaseDirectory);
+			ai.SteamArguments = string.Format("-applaunch {0}", ai.SteamAppID);
 
 			return ai;
 		}

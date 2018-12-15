@@ -3,6 +3,8 @@ using Kingmaker.Controllers;
 using Kingmaker.Controllers.MapObjects;
 using Kingmaker.EntitySystem.Entities;
 using Kingmaker.PubSubSystem;
+using Kingmaker.UI.SettingsUI;
+using Kingmaker.Utility;
 using KingmakerMods.Helpers;
 using Patchwork;
 
@@ -80,7 +82,7 @@ namespace KingmakerMods.Mods.UI.Configurables.HighlightObjectsToggle
 				return;
 			}
 
-			Kingmaker.Game.Instance.Keyboard.Bind("HighlightObjectsOn", this.ToggleHighlight);
+			Kingmaker.Game.Instance.Keyboard.Bind(SettingsRoot.Instance.HighlightObjects.name + UIConsts.SuffixOn, this.ToggleHighlight);
 
 			this.alias_m_Inactive = false;
 		}
@@ -94,7 +96,7 @@ namespace KingmakerMods.Mods.UI.Configurables.HighlightObjectsToggle
 				return;
 			}
 
-			Kingmaker.Game.Instance.Keyboard.Unbind("HighlightObjectsOn", this.ToggleHighlight);
+			Kingmaker.Game.Instance.Keyboard.Unbind(SettingsRoot.Instance.HighlightObjects.name + UIConsts.SuffixOn, this.ToggleHighlight);
 
 			if (this.alias_m_IsHighlighting)
 			{

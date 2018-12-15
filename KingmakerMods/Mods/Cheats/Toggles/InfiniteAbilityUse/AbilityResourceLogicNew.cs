@@ -10,16 +10,18 @@ namespace KingmakerMods.Mods.Cheats.Toggles.InfiniteAbilityUse
 	public class AbilityResourceLogicNew : AbilityResourceLogic
 	{
 		#region DUPLICATES
+
 		[NewMember]
 		[DuplicatesBody("Spend")]
-		public void source_Spend(AbilityData ability)
+		public virtual void source_Spend(AbilityData ability)
 		{
 			throw new DeadEndException("source_Spend");
 		}
+
 		#endregion
 
 		[ModifiesMember("Spend")]
-		public void mod_Spend(AbilityData ability)
+		public virtual void mod_Spend(AbilityData ability)
 		{
 			UnitEntityData unit = ability.Caster.Unit;
 

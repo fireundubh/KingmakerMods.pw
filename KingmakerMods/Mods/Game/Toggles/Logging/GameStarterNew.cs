@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using Kingmaker;
+using Kingmaker.Utility;
 using KingmakerMods.Helpers;
 using Patchwork;
 using UberLogger;
@@ -31,7 +32,7 @@ namespace KingmakerMods.Mods.Game.Toggles.Logging
 
 			try
 			{
-				string persistentDataPath = Application.persistentDataPath;
+				string persistentDataPath = ApplicationPaths.persistentDataPath;
 
 				Application.SetStackTraceLogType(LogType.Log, StackTraceLogType.None);
 

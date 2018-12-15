@@ -34,6 +34,7 @@
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>KingmakerMods.ruleset</CodeAnalysisRuleSet>
     <NoWarn>169,649</NoWarn>
+    <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Assembly-CSharp, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -54,10 +55,6 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="Unity.Analytics.DataPrivacy, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\SteamLibrary\Pathfinder Kingmaker\Kingmaker_Data\Managed\Unity.Analytics.DataPrivacy.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEngine, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\SteamLibrary\Pathfinder Kingmaker\Kingmaker_Data\Managed\UnityEngine.dll</HintPath>
@@ -133,7 +130,6 @@
     <Compile Include="Mods\Game\Configurables\PointBuy\LevelUpStateNew.cs" />
     <Compile Include="Mods\Fixes\CanvasScalerWorkaroundNew.cs" />
     <Compile Include="Mods\Fixes\LocalMapNew.cs" />
-    <Compile Include="Mods\Game\Toggles\Achievements\ActionAchievementUnlockNew.cs" />
     <Compile Include="Mods\Fixes\SteamAchievementsManagerNew.cs" />
     <Compile Include="Mods\Game\Toggles\Logging\GameHistoryLogNew.cs" />
     <Compile Include="Mods\ILFixes\BirdLaneNew.cs" />
@@ -164,11 +160,8 @@
     <Compile Include="Mods\Game\Configurables\CompanionCost\PlayerNew.cs" />
     <Compile Include="KingmakerPatchInfo.cs" />
     <Compile Include="Mods\Cheats\Toggles\AlwaysUnencumbered\DescriptionTemplatesEncumbranceNew.cs" />
-    <Compile Include="Mods\Game\Toggles\Achievements\AchievementsManagerNew.cs" />
     <Compile Include="Mods\Game\Configurables\DeltaTime\TimeControllerNew.cs" />
     <Compile Include="Mods\Game\Toggles\Logging\GameStarterNew.cs" />
-    <Compile Include="Mods\Game\Toggles\PremiumRewards\AddPremiumRewardNew.cs" />
-    <Compile Include="Mods\Game\Toggles\SteamCloud\SteamSavesReplicatorNew.cs" />
     <Compile Include="Mods\Game\Toggles\PremiumRewards\BlueprintPortraitNew.cs" />
     <Compile Include="Mods\Game\Toggles\RestAnywhere\RestControllerNew.cs" />
     <Compile Include="Mods\Game\Toggles\RestAnywhere\RestCampControllerNew.cs" />

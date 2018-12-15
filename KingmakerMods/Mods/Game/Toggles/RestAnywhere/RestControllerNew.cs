@@ -34,11 +34,6 @@ namespace KingmakerMods.Mods.Game.Toggles.RestAnywhere
 			CampingSettings campingSettings = Kingmaker.Game.Instance.CurrentlyLoadedArea.CampingSettings;
 			campingSettings.CampingAllowed = true;
 
-//			if (!campingSettings.CampingAllowed)
-//			{
-//				return false;
-//			}
-
 			bool huntersAssigned = Kingmaker.Game.Instance.Player.Camping.Hunters.Count > 0;
 
 			int rationsCount = Kingmaker.Game.Instance.Player.Inventory.Count(Kingmaker.Game.Instance.BlueprintRoot.RestItem);

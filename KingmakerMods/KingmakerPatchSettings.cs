@@ -330,24 +330,10 @@ namespace KingmakerMods
 			public static bool CampsiteCleanup { get; set; }
 
 			/// <summary>
-			/// When true, Steam and GOG achievements will be disabled.
-			/// </summary>
-			public static bool DisableAchievements { get; set; }
-
-			/// <summary>
-			/// When true, Unity will no longer call home.
-			/// </summary>
-//			public static bool DisableAnalytics { get; set; }
-			/// <summary>
 			/// When true, the game history log will be disabled, reducing the size of statistic.json. Disabling history
 			/// potentially improves loading speed; however, this history is used by Owlcat Games for debugging.
 			/// </summary>
 			public static bool DisableHistory { get; set; }
-
-			/// <summary>
-			/// When true, saves will no longer be transferred to the Steam Cloud. Only applies to Steam players.
-			/// </summary>
-			public static bool DisableSteamCloud { get; set; }
 
 			/// <summary>
 			/// When true, the debug log will be written to "%USERPROFILE%\AppData\LocalLow\Owlcat Games\Pathfinder Kingmaker".
@@ -369,23 +355,14 @@ namespace KingmakerMods
 			/// </summary>
 			public static bool UnlockPremiumPortraits { get; set; }
 
-			/// <summary>
-			/// When true, premium DLC rewards will be unlocked.
-			/// </summary>
-			public static bool UnlockPremiumRewards { get; set; }
-
 			static Game()
 			{
-				CampsiteCleanup     = UserConfig.Parser.TryGetBool(SECTION, "bCampsiteCleanup");
-				DisableAchievements = UserConfig.Parser.TryGetBool(SECTION, "bDisableAchievements");
-//				DisableAnalytics = UserConfig.Parser.TryGetBool(SECTION, "bDisableAnalytics");
+				CampsiteCleanup        = UserConfig.Parser.TryGetBool(SECTION, "bCampsiteCleanup");
 				DisableHistory         = UserConfig.Parser.TryGetBool(SECTION, "bDisableHistory");
-				DisableSteamCloud      = UserConfig.Parser.TryGetBool(SECTION, "bDisableSteamCloud");
 				Logging                = UserConfig.Parser.TryGetBool(SECTION, "bLogging");
 				NoManLeftBehind        = UserConfig.Parser.TryGetBool(SECTION, "bNoManLeftBehind");
 				RestAnywhere           = UserConfig.Parser.TryGetBool(SECTION, "bRestAnywhere");
 				UnlockPremiumPortraits = UserConfig.Parser.TryGetBool(SECTION, "bUnlockPremiumPortraits");
-				UnlockPremiumRewards   = UserConfig.Parser.TryGetBool(SECTION, "bUnlockPremiumRewards");
 			}
 		}
 

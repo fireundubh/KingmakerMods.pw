@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using Kingmaker.GameModes;
 using Kingmaker.UI;
+using Kingmaker.UI.SettingsUI;
+using Kingmaker.Utility;
 using KingmakerMods.Helpers;
 using Patchwork;
 using UnityEngine;
@@ -19,7 +21,7 @@ namespace KingmakerMods.Mods.UI.Configurables.HighlightObjectsToggle
 		[ModifiesMember("RegisterBinding")]
 		public void mod_RegisterBinding(string name, KeyCode key, IEnumerable<GameModeType> gameModes, bool ctrl, bool alt, bool shift, bool release = false, ModificationSide side = ModificationSide.Any)
 		{
-			if (KingmakerPatchSettings.HighlightObjects.Enabled && name == "HighlightObjectsOff")
+			if (KingmakerPatchSettings.HighlightObjects.Enabled && name == SettingsRoot.Instance.HighlightObjects.name + UIConsts.SuffixOff)
 			{
 				return;
 			}

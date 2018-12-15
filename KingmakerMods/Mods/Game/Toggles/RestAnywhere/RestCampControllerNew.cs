@@ -41,12 +41,6 @@ namespace KingmakerMods.Mods.Game.Toggles.RestAnywhere
 
 			currentlyLoadedArea.CampingSettings.CampingAllowed = true;
 
-//			if (!currentlyLoadedArea.CampingSettings.CampingAllowed)
-//			{
-//				EventBus.RaiseEvent(delegate(IWarningNotificationUIHandler h) { h.HandleWarning(WarningNotificationType.RestOnThisZoneImpossible); });
-//				return;
-//			}
-
 			var component = currentlyLoadedArea.GetComponent<OverrideCampingAction>();
 
 			if (component)
