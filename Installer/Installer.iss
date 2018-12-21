@@ -36,6 +36,7 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Dirs]
+Name: "{app}\Logs"
 Name: "{app}\Mods"
 Name: "{code:GamePathOrCustom}\Kingmaker_Data\Mods\Localization\deDE"
 Name: "{code:GamePathOrCustom}\Kingmaker_Data\Mods\Localization\enGB"
@@ -67,6 +68,7 @@ Source: "E:\repos\KingmakerMods.pw\KingmakerMods.ini"; DestDir: "{code:GamePathO
 Source: "E:\repos\KingmakerMods.pw\UserConfig.ini"; DestDir: "{code:GamePathOrCustom}"; Flags: ignoreversion
 Source: "E:\repos\KingmakerMods.pw Launcher\PatchworkLauncher\bin\Release\Patchwork.Attributes.dll"; DestDir: "{code:GamePathOrCustom}\Kingmaker_Data\Managed"; Flags: ignoreversion
 Source: "E:\repos\UserConfig\packages\ini-parser.2.5.2\lib\net20\INIFileParser.dll"; DestDir: "{code:GamePathOrCustom}\Kingmaker_Data\Managed"; Flags: ignoreversion
+Source: "E:\repos\KingmakerMods.pw Launcher\packages\NCode.ReparsePoints.1.0.2\lib\net451\NCode.ReparsePoints.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "E:\repos\UserConfig\UserConfig\bin\Release\UserConfig.dll"; DestDir: "{code:GamePathOrCustom}\Kingmaker_Data\Managed"; Flags: ignoreversion
 Source: "E:\repos\KingmakerMods.pw\Kingmaker_Data\Mods\Localization\enGB\KingmakerMods.pw.json"; DestDir: "{code:GamePathOrCustom}\Kingmaker_Data\Mods\Localization\deDE"; Flags: ignoreversion
 Source: "E:\repos\KingmakerMods.pw\Kingmaker_Data\Mods\Localization\enGB\KingmakerMods.pw.json"; DestDir: "{code:GamePathOrCustom}\Kingmaker_Data\Mods\Localization\enGB"; Flags: ignoreversion

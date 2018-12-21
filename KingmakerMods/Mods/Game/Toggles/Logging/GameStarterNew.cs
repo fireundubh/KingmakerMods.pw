@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using Kingmaker;
+using Kingmaker.Stores;
 using Kingmaker.Utility;
 using KingmakerMods.Helpers;
 using Patchwork;
@@ -62,7 +63,7 @@ namespace KingmakerMods.Mods.Game.Toggles.Logging
 
 			AkSoundEngine.SetRTPCValue("AudioLevel", this.MasterVolume.NormalizedValue * 100f, null, 0);
 			AkSoundEngine.SetRTPCValue("MusicLevel", this.MusicVolume.NormalizedValue * 100f, null, 0);
-
+			StoreManager.InitializeStore();
 			UberDebug.LogSystem("GameStarter.Awake finished");
 		}
 	}
