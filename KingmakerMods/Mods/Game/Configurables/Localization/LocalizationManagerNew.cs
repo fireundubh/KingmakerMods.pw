@@ -15,15 +15,60 @@ namespace KingmakerMods.Mods.Game.Configurables.Localization
 	[ModifiesType]
 	public class LocalizationManagerNew : LocalizationManager
 	{
-		[ModifiesMember("s_CurrentLocale", ModificationScope.Nothing)]
-		private static Locale alias_s_CurrentLocale;
+		#region Public Properties
+
+		[ModifiesMember("CurrentLocale")]
+		public static Locale mod_CurrentLocale
+		{
+			[ModifiesMember("get_CurrentLocale")]
+			get
+			{
+				return alias_s_CurrentLocale;
+			}
+			[ModifiesMember("set_CurrentLocale")]
+			set
+			{
+				Locale locale = alias_s_CurrentLocale;
+
+				alias_s_CurrentLocale = value;
+
+				PlayerPrefs.SetString("LocalePref", value.ToString());
+
+				if (Application.isPlaying)
+				{
+					CurrentPack = alias_LoadPack(alias_s_CurrentLocale);
+					LoadPacks();
+				}
+
+				if (locale != alias_s_CurrentLocale)
+				{
+					alias_OnLocaleChanged();
+				}
+			}
+		}
+
+		#endregion
+
+		#region Public Methods and Operators
+
+		[NewMember]
+		public static string LoadString(string assetId)
+		{
+			string text = CurrentPack?.GetText(assetId) ?? "<null>";
+
+			return Application.isPlaying ? TextTemplateEngine.Process(text) : text;
+		}
+
+		#endregion
+
+		#region Methods
 
 		[NewMember]
 		private static void LoadPacks()
 		{
-			List<LocalizationPack> currentPacks = new List<LocalizationPack>();
+			var currentPacks = new List<LocalizationPack>();
 
-			DirectoryInfo directoryInfo = new DirectoryInfo(Path.Combine(Application.dataPath, "Mods", "Localization/" + LocalizationManagerNew.alias_s_CurrentLocale));
+			var directoryInfo = new DirectoryInfo(Path.Combine(Application.dataPath, "Mods", "Localization/" + alias_s_CurrentLocale));
 			FileInfo[] files;
 
 			try
@@ -41,7 +86,7 @@ namespace KingmakerMods.Mods.Game.Configurables.Localization
 			{
 				try
 				{
-					using (StreamReader streamReader = new StreamReader(file.FullName))
+					using (var streamReader = new StreamReader(file.FullName))
 					{
 						currentPacks.Add(JsonConvert.DeserializeObject<LocalizationPack>(streamReader.ReadToEnd()));
 					}
@@ -53,16 +98,16 @@ namespace KingmakerMods.Mods.Game.Configurables.Localization
 				}
 			}
 
+			if (CurrentPack == null)
+			{
+				return;
+			}
+
 			foreach (LocalizationPack currentPack in currentPacks)
 			{
 				foreach (KeyValuePair<string, string> keyValuePair in currentPack.Strings)
 				{
-					if (CurrentPack == null)
-					{
-						continue;
-					}
-
-					if (CurrentPack.Strings.ContainsKey(keyValuePair.Key))
+					if (CurrentPack.Strings.ContainsKey(keyValuePair.Key) == true)
 					{
 						CurrentPack.Strings.Remove(keyValuePair.Key);
 					}
@@ -72,32 +117,12 @@ namespace KingmakerMods.Mods.Game.Configurables.Localization
 			}
 		}
 
-		[ModifiesMember("CurrentLocale")]
-		public static Locale mod_CurrentLocale
-		{
-			[ModifiesMember("get_CurrentLocale")]
-			get { return LocalizationManagerNew.alias_s_CurrentLocale; }
-			[ModifiesMember("set_CurrentLocale")]
-			set
-			{
-				Locale locale = LocalizationManagerNew.alias_s_CurrentLocale;
+		#endregion
 
-				LocalizationManagerNew.alias_s_CurrentLocale = value;
+		#region Aliases
 
-				PlayerPrefs.SetString("LocalePref", value.ToString());
-
-				if (Application.isPlaying)
-				{
-					LocalizationManagerNew.CurrentPack = LocalizationManagerNew.alias_LoadPack(LocalizationManagerNew.alias_s_CurrentLocale);
-					LocalizationManagerNew.LoadPacks();
-				}
-
-				if (locale != LocalizationManagerNew.alias_s_CurrentLocale)
-				{
-					LocalizationManagerNew.alias_OnLocaleChanged();
-				}
-			}
-		}
+		[ModifiesMember("s_CurrentLocale", ModificationScope.Nothing)]
+		private static Locale alias_s_CurrentLocale;
 
 		[ModifiesMember("LoadPack", ModificationScope.Nothing)]
 		private static LocalizationPack alias_LoadPack(Locale locale)
@@ -111,29 +136,6 @@ namespace KingmakerMods.Mods.Game.Configurables.Localization
 			throw new DeadEndException("source_OnLocaleChanged");
 		}
 
-		[NewMember]
-		public static string LoadString(string assetId)
-		{
-			string result;
-
-			try
-			{
-				string text = CurrentPack?.GetText(assetId) ?? "<null>";
-
-				if (Application.isPlaying)
-				{
-					result = TextTemplateEngine.Process(text);
-				}
-				else
-				{
-					result = text;
-				}
-			}
-			finally
-			{
-			}
-
-			return result;
-		}
+		#endregion
 	}
 }
