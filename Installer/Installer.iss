@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "KingmakerMods.pw"
-#define MyAppVersion "1.0.20"
+#define MyAppVersion "1.0.21"
 #define MyAppPublisher "fireundubh"
 #define MyAppURL "https://www.nexusmods.com/pathfinderkingmaker/mods/32"
 #define MyAppExeName "PatchworkLauncher.exe"
