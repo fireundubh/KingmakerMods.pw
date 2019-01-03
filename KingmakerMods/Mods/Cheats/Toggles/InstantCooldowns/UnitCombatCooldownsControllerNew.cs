@@ -10,12 +10,14 @@ namespace KingmakerMods.Mods.Cheats.Toggles.InstantCooldowns
 	public class UnitCombatCooldownsControllerNew : UnitCombatCooldownsController
 	{
 		#region DUPLICATES
+
 		[NewMember]
 		[DuplicatesBody("TickOnUnit")]
 		protected void source_TickOnUnit(UnitEntityData unit)
 		{
 			throw new DeadEndException("source_TickOnUnit");
 		}
+
 		#endregion
 
 		[ModifiesMember("TickOnUnit")]
@@ -24,6 +26,7 @@ namespace KingmakerMods.Mods.Cheats.Toggles.InstantCooldowns
 			if (!KingmakerPatchSettings.Cheats.InstantCooldowns)
 			{
 				this.source_TickOnUnit(unit);
+				return;
 			}
 
 			if (unit.IsDirectlyControllable)

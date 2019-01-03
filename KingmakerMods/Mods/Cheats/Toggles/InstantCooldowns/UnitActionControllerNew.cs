@@ -9,12 +9,14 @@ namespace KingmakerMods.Mods.Cheats.Toggles.InstantCooldowns
 	public class UnitActionControllerNew : UnitActionController
 	{
 		#region DUPLICATES
+
 		[NewMember]
 		[DuplicatesBody("UpdateCooldowns")]
 		public void source_UpdateCooldowns(UnitCommand command)
 		{
 			throw new DeadEndException("source_UpdateCooldowns");
 		}
+
 		#endregion
 
 		[ModifiesMember("UpdateCooldowns")]

@@ -11,12 +11,14 @@ namespace KingmakerMods.Mods.Cheats.Toggles.InstantCooldowns
 	public abstract class UnitCommandNew : UnitCommand
 	{
 		#region DUPLICATES
+
 		[NewMember]
 		[DuplicatesBody("get_IsIgnoreCooldown")]
 		public bool source_get_IsIgnoreCooldown()
 		{
 			throw new DeadEndException("source_get_IsIgnoreCooldown");
 		}
+
 		#endregion
 
 		[ModifiesMember("IsIgnoreCooldown")]

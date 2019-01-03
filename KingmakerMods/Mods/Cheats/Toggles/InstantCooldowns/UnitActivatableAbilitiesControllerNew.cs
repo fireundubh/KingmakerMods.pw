@@ -13,17 +13,25 @@ namespace KingmakerMods.Mods.Cheats.Toggles.InstantCooldowns
 	public class UnitActivatableAbilitiesControllerNew : UnitActivatableAbilitiesController
 	{
 		#region DUPLICATES
+
 		[NewMember]
 		[DuplicatesBody("TickOnUnit")]
 		protected void source_TickOnUnit(UnitEntityData unit)
 		{
 			throw new DeadEndException("source_TickOnUnit");
 		}
+
 		#endregion
 
 		[ModifiesMember("TickOnUnit")]
 		protected void mod_TickOnUnit(UnitEntityData unit)
 		{
+			if (!KingmakerPatchSettings.Cheats.InstantCooldowns)
+			{
+				this.source_TickOnUnit(unit);
+				return;
+			}
+
 			if (unit.ActivatableAbilities.RawFacts.Count <= 0)
 			{
 				return;
@@ -50,17 +58,20 @@ namespace KingmakerMods.Mods.Cheats.Toggles.InstantCooldowns
 					{
 						ability.TimeToNextRound -= Kingmaker.Game.Instance.TimeController.GameDeltaTime;
 
-						if (ability.TimeToNextRound <= 0f)
+						if (!(ability.TimeToNextRound <= 0f))
 						{
-							ability.OnNewRound();
-
-							if (KingmakerPatchSettings.Cheats.InstantCooldowns && ability.Owner.Unit.IsDirectlyControllable)
-							{
-								UnitCooldownsHelper.Reset(ability.Owner.Unit.CombatState.Cooldown);
-							}
-
-							ability.TimeToNextRound = 6f;
+							continue;
 						}
+
+						ability.OnNewRound();
+
+						// the actual mod
+						if (ability.Owner.Unit.IsDirectlyControllable)
+						{
+							UnitCooldownsHelper.Reset(ability.Owner.Unit.CombatState.Cooldown);
+						}
+
+						ability.TimeToNextRound = 6f;
 					}
 				}
 				else if (ability.IsOn && (ability.Blueprint.ActivateImmediately || ability.ReadyToStart))

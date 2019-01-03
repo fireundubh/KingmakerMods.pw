@@ -10,12 +10,14 @@ namespace KingmakerMods.Mods.Cheats.Toggles.InstantCooldowns
 	public class UnitCombatStateNew : UnitCombatState
 	{
 		#region DUPLICATES
+
 		[NewMember]
 		[DuplicatesBody("OnNewRound")]
 		public void source_OnNewRound()
 		{
 			throw new DeadEndException("source_OnNewRound");
 		}
+
 		#endregion
 
 		[ModifiesMember("OnNewRound")]
