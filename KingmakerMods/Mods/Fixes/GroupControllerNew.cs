@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Kingmaker.EntitySystem.Entities;
 using Kingmaker.UI.Common;
 using Kingmaker.UI.Group;
@@ -34,15 +35,6 @@ namespace KingmakerMods.Mods.Fixes
 			throw new DeadEndException("alias_SetCharacter");
 		}
 
-		[NewMember]
-		private void SetCharactersInGroup(IEnumerable<UnitEntityData> group, ref int index)
-		{
-			foreach (UnitEntityData unit in group)
-			{
-				this.SetCharacter(unit, index++);
-			}
-		}
-
 		[ModifiesMember("SetGroup")]
 		private void mod_SetGroup()
 		{
@@ -52,11 +44,23 @@ namespace KingmakerMods.Mods.Fixes
 
 			if (this.WithRemote)
 			{
-				this.SetCharactersInGroup(group, ref index);
+				for (var i = 0; i < 6; i++)
+				{
+					UnitEntityData unit = group.ElementAtOrDefault(this.alias_m_StartIndex + i);
+
+					if (unit != null)
+					{
+						this.SetCharacter(unit, index++);
+					}
+				}
+
 				return;
 			}
 
-			this.SetCharactersInGroup(group, ref index);
+			foreach (UnitEntityData unit in group)
+			{
+				this.SetCharacter(unit, index++);
+			}
 
 			for (int j = index; j < 6; j++)
 			{
