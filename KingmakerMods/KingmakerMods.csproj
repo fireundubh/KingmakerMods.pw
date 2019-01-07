@@ -94,6 +94,7 @@
     <Compile Include="Mods\Cheats\Toggles\Undetectable\UnitStealthNew.cs" />
     <Compile Include="Mods\Cheats\Toggles\UnlockCookingRecipes\CampingStateNew.cs" />
     <Compile Include="Mods\Fixes\GroupControllerNew.cs" />
+    <Compile Include="Mods\Fixes\StaticCanvasNew.cs" />
     <Compile Include="Mods\UI\Configurables\HighlightObjectsToggle\InteractionHighlightControllerNew.cs" />
     <Compile Include="Mods\UI\Configurables\HighlightObjectsToggle\KeyboardAccessNew.cs" />
     <Compile Include="Mods\Fixes\Familiar.cs" />
